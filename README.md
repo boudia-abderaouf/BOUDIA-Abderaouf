@@ -1,4 +1,4 @@
-## Hi 👋, I'm a PhD student at the LIS Lab at the Ecole Centrale Méditerranée and Co-director of Prep'Up School
+## Hi 👋, I'm a
 <p align="left">
   <a href="https://github.com/MohamedNennouche?tab=followers">
     <img alt="GitHub followers" src="https://img.shields.io/github/followers/MohamedNennouche?color=green&logo=github">
