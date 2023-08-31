@@ -20,7 +20,7 @@
 - 💬 Ping me about **Python**, **Machine Learning**, **Deep Learning**,  **Signal processing**
 - 📫 Reach me: [linkedin.com/in/abderaouf-boudia-4bb166174/](https://www.linkedin.com/in/abderaouf-boudia-4bb166174/)
 - :email: Send me an email to abderaouf.boudia@gmail.com
-- 📝 Checkout my [Resume](./files/cv.pdf).
+- 📝 Checkout my [Resume](./file/cvv.pdf).
 
 ### My current stack
 <img height="48" src="img/python.svg" alt="python"><img height="48" src="img/Linux.svg" alt="Linux">
