@@ -14,7 +14,7 @@
 
 ### Bio
 - 🏢 I'm currently at Master 2 student in **Traitement de l'information et exploitation données** at **Télécom SudParis - Université Paris-Saclay**
-- 🎓 I hold a Bachelor's degree in Engineering and a Master's degree in Electronics from Ecole Nationale Polytechnique.
+- 🎓 I hold a Bachelor's degree in Engineering and a Master's degree in Electronics from Ecole Nationale Polytechnique d'Alger.
 - ⚙️ I use daily: `.py`, `.ipynb` and `.cpp`
 - 🌱 Learning all about **Data science** and **Machine Learning**
 - 💬 Ping me about **Python**, **Machine Learning**, **Deep Learning**,  **Signal processing**
