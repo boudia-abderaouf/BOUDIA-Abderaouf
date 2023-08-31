@@ -32,10 +32,10 @@
 <img height="48" src="img/google-data-studio.svg" alt="Google Data Studio"> <img height="48" src="img/amazon-quicksight.svg" alt="Amazon Quicksight"> <img height="48" src="img/Power_BI.svg" alt="Power BI">
 
 ### Python libraries mastered
-<img height="48" src="img/pandas.svg" alt="Pandas"> <img height="48" src="img/numpy.svg" alt="Numpy"> <img height="48" src="img/Matplotlib.svg" alt="Matplotlib"> <img height="48" src="img/seaborn.svg" alt="Seaborn"> <img height="48" src="img/Scikitlearn.svg" alt="Scikitlearn"> <img height="48" src="img/keras.svg" alt="Keras"> <img height="48" src="img/tensorflow.svg" alt="Tensorflow"> <img height="48" src="img/OpenCV.svg" alt="OpenCV"> <img height="48" src="img/selenium.svg" alt="Selenium"> 
+<img height="48" src="img/pandas.svg" alt="Pandas"> <img height="48" src="img/numpy.svg" alt="Numpy"> <img height="48" src="img/Matplotlib.svg" alt="Matplotlib"> <img height="48" src="img/seaborn.svg" alt="Seaborn"> <img height="48" src="img/Scikitlearn.svg" alt="Scikitlearn"> <img height="48" src="img/keras.svg" alt="Keras"> <img height="48" src="img/tensorflow.svg" alt="Tensorflow"> <img height="48" src="img/OpenCV.svg" alt="OpenCV"> <img height="48" src="img/TensorFlow_logo" alt="tflite"> 
 
 ### Softwares and tools I use daily
-<img height="48" src="img/vscode.svg" alt="vscode"> <img height="48" src="img/DBeaver.svg" alt="DBeaver"> <img height="48" src="img/datagrip.svg" alt="datagrip"> <img height="48" src="img/s3browser.png" alt="s3 browser"> <img height="48" src="img/postman.svg" alt="postman"> <img height="48" src="img/colab.svg" alt="Google colab"> <img height="48" src="img/Gradient.png" alt="Paperspace Gradient"> <img height="48" src="img/notion.svg" alt="Notion">
+<img height="48" src="img/vscode.svg" alt="vscode"> <img height="48" src="img/colab.svg" alt="Arduino"> <img height="48" src="img/colab.svg" alt="Google colab"> <img height="48" src="img/notion.svg" alt="Notion">
 
 ### Development Stuffs
 
