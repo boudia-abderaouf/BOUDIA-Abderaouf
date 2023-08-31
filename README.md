@@ -1,4 +1,4 @@
-## Hi 👋, I'm an Master 2 student in Traitement de l'information et exploitation données at Télécom SudParis - Université Paris-Saclay
+## Hi 👋, I'm a Master 2 student in Traitement de l'information et exploitation données at Télécom SudParis - Université Paris-Saclay
 <p align="left">
   <a href="https://github.com/boudia-abderaouf?tab=followers">
     <img alt="GitHub followers" src="https://img.shields.io/github/followers/boudia-abderaouf?color=green&logo=github">
@@ -13,7 +13,7 @@
 - :calendar: Seeking a data science internship opportunity for April 2024
 
 ### Bio
-- 🏢 I'm currently at Master 2 student in **Traitement de l'information et exploitation données** at **Télécom SudParis - Université Paris-Saclay**
+- 🏢 I'm currently a Master 2 student in **Traitement de l'information et exploitation données** at **Télécom SudParis - Université Paris-Saclay**
 - 🎓 I hold a Bachelor's degree in Engineering and a Master's degree in Electronics from Ecole Nationale Polytechnique d'Alger.
 - ⚙️ I use daily: `.py`, `.ipynb` and `.cpp`
 - 🌱 Learning all about **Data science** and **Machine Learning**
