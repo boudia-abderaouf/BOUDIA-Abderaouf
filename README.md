@@ -1,4 +1,4 @@
-## Hi 👋, I'm a
+## Hi 👋, I'm an Master 2 student in Traitement de l'information et exploitation données at Télécom SudParis - Université Paris-Saclay
 <p align="left">
   <a href="https://github.com/boudia-abderaouf?tab=followers">
     <img alt="GitHub followers" src="https://img.shields.io/github/followers/boudia-abderaouf?color=green&logo=github">
@@ -9,17 +9,17 @@
 </p>
 
 ### Now
-- :rocket: Creator and maintainer of [WaterRocket](https://github.com/MohamedNennouche/Water-rocket-launch-simulator)
-- :fire: Interested in web scraping, data science and deep learning
-- :calendar: Looking for contributing to python based open source projects and Machine Learning and Deep Learning competitions
+- :fire: Passionate about data science, machine learning, deep learning, Signal processing and electronics.
+- :calendar: Seeking a data science internship opportunity for April 2024
 
 ### Bio
-- 🏢 I'm currently PhD Student at **Laboratoire d'Informatique & Systèmes at the Ecole Centrale de Marseille** and the Co-director of **Prep'Up School**
-- ⚙️ I use daily: `.py`, `.sql`, `.ipynb`, `.c` and `.cpp`
+- 🏢 I'm currently at Master 2 student in **Traitement de l'information et exploitation données** at **Télécom SudParis - Université Paris-Saclay**
+- 🎓 I hold a Bachelor's degree in Engineering and a Master's degree in Electronics from Ecole Nationale Polytechnique.
+- ⚙️ I use daily: `.py`, `.ipynb` and `.cpp`
 - 🌱 Learning all about **Data science** and **Machine Learning**
-- 💬 Ping me about **Python**, **Web scraping**, **Machine Learning**, **Deep Learning**,  **Signal processing**
-- 📫 Reach me: [linkedin.com/mohamed-nennouche/](https://www.linkedin.com/in/mohamed-nennouche/)
-- :email: Send me an email to moohaameed.nennouche@gmail.com
+- 💬 Ping me about **Python**, **Machine Learning**, **Deep Learning**,  **Signal processing**
+- 📫 Reach me: [linkedin.com/in/abderaouf-boudia-4bb166174/](https://www.linkedin.com/in/abderaouf-boudia-4bb166174/)
+- :email: Send me an email to abderaouf.boudia@gmail.com
 - 📝 Checkout my [Resume](./files/cv.pdf).
 
 ### My current stack
@@ -30,40 +30,6 @@
 
 ### Softwares and tools I use daily
 <img height="48" src="img/vscode.svg" alt="vscode">  <img height="48" src="img/colab.svg" alt="Google colab"> <img height="48" src="img/arduino.svg" alt="Arduino"> <img height="48" src="img/notion.svg" alt="Notion">
-
-### Development Stuffs
-
-#### :trophy: Github Profile trophy
-<div align="center">
-
-[![trophy](https://github-profile-trophy.vercel.app/?username=MohamedNennouche&theme=onedark)](https://github.com/MohamedNennouche/github-profile-trophy)
-
-</div>
-
-#### ⚡ Github Stats
-
-<table>
-  <tr>
-    <td>
-      <a href="https://github.com/anuraghazra/github-readme-stats"> <img src="https://github-readme-stats.vercel.app/api?username=MohamedNennouche&show_icons=true&hide_border=true&&count_private=true&include_all_commits=true&theme=tokyonight" alt="Mohamed Nennouche's GitHub Stats" /> </a>
-    </td>
-    <td>
-      <a href="https://github.com/anuraghazra/github-readme-stats"> <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=MohamedNennouche&show_icons=true&hide_border=true&layout=compact&langs_count=8&theme=tokyonight" alt="Top Languages" /> </a>
-    </td>
-  </tr>
-  <tr>
-    <td colspan=2 align="center">
-      <a href="https://git.io/streak-stats"> <img src="https://streak-stats.demolab.com?user=MohamedNennouche&theme=tokyonight&hide_border=true" alt="Mohamed Nennouche's GitHub Readme Streak Stats" /> </a>
-    </td>
-  </tr>
-</table>
-
-#### :watch: Wakatime Stats
-
-[![Mohamed's wakatime stats](https://github-readme-stats.vercel.app/api/wakatime?username=MohamedNennouche)](https://wakatime.com/@1dace552-f52d-4c2c-913e-eacfe1d41572)
-
-
-<figure><embed src="https://wakatime.com/share/@MohamedNennouche/931c6fd2-3f66-4b95-99b1-95e6910d15da.svg"></embed></figure>
 
 
 ### Connect with me
