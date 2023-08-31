@@ -3,7 +3,7 @@
   <a href="https://github.com/boudia-abderaouf?tab=followers">
     <img alt="GitHub followers" src="https://img.shields.io/github/followers/boudia-abderaouf?color=green&logo=github">
   </a>
-  <a href="https://github.com/MohamedNennouche/">
+  <a href="https://github.com/boudia-abderaouf/">
     <img src="https://komarev.com/ghpvc/?username=boudia-abderaouf" alt="visitors" />
   </a>
 </p>
