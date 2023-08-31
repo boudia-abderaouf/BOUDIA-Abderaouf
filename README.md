@@ -1,14 +1,11 @@
 ## Hi 👋, I'm a
 <p align="left">
-  <a href="https://github.com/MohamedNennouche?tab=followers">
-    <img alt="GitHub followers" src="https://img.shields.io/github/followers/MohamedNennouche?color=green&logo=github">
+  <a href="https://github.com/boudia-abderaouf?tab=followers">
+    <img alt="GitHub followers" src="https://img.shields.io/github/followers/boudia-abderaouf?color=green&logo=github">
   </a>
   <a href="https://github.com/MohamedNennouche/">
-    <img src="https://komarev.com/ghpvc/?username=MohamedNennouche" alt="visitors" />
+    <img src="https://komarev.com/ghpvc/?username=boudia-abderaouf" alt="visitors" />
   </a>
-  <a href="https://wakatime.com/@1dace552-f52d-4c2c-913e-eacfe1d41572">
-    <img src="https://wakatime.com/badge/user/1dace552-f52d-4c2c-913e-eacfe1d41572.svg" alt="wakatime activities" />
-  </a> 
 </p>
 
 ### Now
@@ -18,24 +15,21 @@
 
 ### Bio
 - 🏢 I'm currently PhD Student at **Laboratoire d'Informatique & Systèmes at the Ecole Centrale de Marseille** and the Co-director of **Prep'Up School**
-- ⚙️ I use daily: `.py`, `.sql`, `.ipynb`, `.json` , `.c` and `.cpp`
+- ⚙️ I use daily: `.py`, `.sql`, `.ipynb`, `.c` and `.cpp`
 - 🌱 Learning all about **Data science** and **Machine Learning**
-- 💬 Ping me about **Python**, **Web scraping**, **Machine Learning**, **Deep Learning**, **Computer Vision**, **Signal processing**
+- 💬 Ping me about **Python**, **Web scraping**, **Machine Learning**, **Deep Learning**,  **Signal processing**
 - 📫 Reach me: [linkedin.com/mohamed-nennouche/](https://www.linkedin.com/in/mohamed-nennouche/)
 - :email: Send me an email to moohaameed.nennouche@gmail.com
 - 📝 Checkout my [Resume](./files/cv.pdf).
 
 ### My current stack
-<img height="48" src="img/python.svg" alt="python"> <img height="48" src="img/postgresql.svg" alt="postgresql"> <img height="48" src="img/Linux.svg" alt="Linux"> <img height="48" src="img/aws.svg" alt="AWS"> <img height="48" src="img/amazon-s3.svg" alt="Amazon S3"> <img height="48" src="img/aws-redshift.svg" alt="Amazon Redshift"> <img height="48" src="img/Git.svg" alt="Git">
-
-### Data visualization tools used
-<img height="48" src="img/google-data-studio.svg" alt="Google Data Studio"> <img height="48" src="img/amazon-quicksight.svg" alt="Amazon Quicksight"> <img height="48" src="img/Power_BI.svg" alt="Power BI">
+<img height="48" src="img/python.svg" alt="python"><img height="48" src="img/Linux.svg" alt="Linux">
 
 ### Python libraries mastered
-<img height="48" src="img/pandas.svg" alt="Pandas"> <img height="48" src="img/numpy.svg" alt="Numpy"> <img height="48" src="img/Matplotlib.svg" alt="Matplotlib"> <img height="48" src="img/seaborn.svg" alt="Seaborn"> <img height="48" src="img/Scikitlearn.svg" alt="Scikitlearn"> <img height="48" src="img/keras.svg" alt="Keras"> <img height="48" src="img/tensorflow.svg" alt="Tensorflow"> <img height="48" src="img/OpenCV.svg" alt="OpenCV"> <img height="48" src="img/TensorFlow_logo.svg" alt="tflite"> 
+<img height="48" src="img/pandas.svg" alt="Pandas"> <img height="48" src="img/numpy.svg" alt="Numpy"> <img height="48" src="img/Matplotlib.svg" alt="Matplotlib"> <img height="48" src="img/seaborn.svg" alt="Seaborn"> <img height="48" src="img/Scikitlearn.svg" alt="Scikitlearn"> <img height="48" src="img/keras.svg" alt="Keras"> <img height="48" src="img/tensorflow.svg" alt="Tensorflow"> <img height="48" src="img/TensorFlow_lite.png" alt="tflite"> 
 
 ### Softwares and tools I use daily
-<img height="48" src="img/vscode.svg" alt="vscode"> <img height="48" src="img/colab.svg" alt="Arduino"> <img height="48" src="img/colab.svg" alt="Google colab"> <img height="48" src="img/notion.svg" alt="Notion">
+<img height="48" src="img/vscode.svg" alt="vscode">  <img height="48" src="img/colab.svg" alt="Google colab"> <img height="48" src="img/arduino.svg" alt="Arduino"> <img height="48" src="img/notion.svg" alt="Notion">
 
 ### Development Stuffs
 
