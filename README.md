@@ -44,11 +44,11 @@
 <img height="48" src="img/pytorch.svg" alt="Pytorch"> <img height="48" src="img/sm.png" alt="Segmentation models pytorch"> <img height="48" src="img/Scikitlearn.svg" alt="Sklearn"> <img height="48" src="img/keras.svg" alt="Keras"> <img height="48" src="img/tensorflow.svg" alt="TensorFlow"> <img height="48" src="img/TensorFlow_lite.png" alt="TFLite"> <img height="48" src="img/opencv.svg" alt="OpenCV"> <img height="48" src="img/mlflow.svg" alt="MLflow "> 
 
 ### 🏆 GitHub Stats & Contributions
-<p align="left">
+<!-- <p align="left">
   <img src="https://github-readme-stats.vercel.app/api?username=boudia-abderaouf&show_icons=true&theme=radical" alt="GitHub stats" />
   <img src="https://github-readme-streak-stats.herokuapp.com/?user=boudia-abderaouf&theme=radical" alt="GitHub streak" />
   <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=boudia-abderaouf&layout=compact&theme=radical" alt="Top languages" />
-</p>
+</p> -->
 
 <p align="center">
   <img src="https://github-profile-trophy.vercel.app/?username=boudia-abderaouf&theme=darkhub" alt="Trophies">
