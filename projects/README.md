@@ -3,6 +3,10 @@
 Six pieces of work, written up as engineering case studies rather than repository
 listings: the problem, the decisions, the evaluation, and what I personally built.
 
+> Each of these also has an illustrated version on the
+> [portfolio site](https://boudia-abderaouf.github.io/BOUDIA-Abderaouf/#work), with
+> architecture diagrams and — for the published research — the results charts.
+
 | Project | Domain | Type | Status |
 |---|---|---|---|
 | [Verifiable Document Intelligence for Building Energy Audits](document-intelligence.md) | LLM systems · RAG · structured extraction | Industrial — case study only | In production |

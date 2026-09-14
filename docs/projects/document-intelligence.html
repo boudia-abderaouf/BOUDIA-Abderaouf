@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Verifiable Document Intelligence for Building Energy Audits — Abderaouf Boudia</title>
+<meta name="description" content="A layered LLM reading pipeline that turns technical building-audit PDFs into a verifiable structured model, with an evidence gate, deterministic normalisation and per-layer failure attribution.">
+<meta name="author" content="Abderaouf Boudia">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Verifiable Document Intelligence for Building Energy Audits — Abderaouf Boudia">
+<meta property="og:description" content="A layered LLM reading pipeline that turns technical building-audit PDFs into a verifiable structured model, with an evidence gate, deterministic normalisation and per-layer failure attribution.">
+<link rel="canonical" href="https://boudia-abderaouf.github.io/BOUDIA-Abderaouf/projects/document-intelligence.html">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230b6e68'/><text y='.9em' x='50%25' text-anchor='middle' font-size='62' font-family='ui-monospace,monospace' fill='%23fff'>A</text></svg>">
+<link rel="stylesheet" href="../styles.css">
+<script>
+  // Applied before first paint so the chosen theme never flashes.
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t;
+  } catch (e) {}
+</script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav__inner">
+    <a class="nav__mark" href="../index.html">abderaouf&nbsp;boudia</a>
+    <nav class="nav__links" aria-label="Sections">
+      <a href="../index.html#work" aria-current="page">Work</a>
+      <a href="../research.html">Research</a>
+      <a href="../index.html#experience">Experience</a>
+      <a href="../index.html#skills">Skills</a>
+      <a href="../index.html#about">About</a>
+      <a class="nav__cta" href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf/raw/main/cv/Abderaouf-Boudia-CV.pdf">CV</a>
+      <button class="theme-toggle" type="button" id="theme-toggle" aria-label="Switch colour theme">
+        <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap crumb"><a href="../index.html">Home</a> <span aria-hidden="true">/</span>
+    <a href="../index.html#work">Work</a> <span aria-hidden="true">/</span> Verifiable Document Intelligence</div>
+
+  <div class="wrap page-head">
+    <h1>Verifiable Document Intelligence for Building Energy Audits</h1>
+    <p class="lede">A layered LLM reading pipeline that turns technical audit PDFs into a building model where every value carries the page, the sentence and the rule that produced it. <span class="status status--live">In production</span></p>
+  </div>
+
+  <div class="wrap">
+  <dl class="meta reveal">
+    <div><dt>Context</dt><dd>Cedrus Solutions</dd></div>
+    <div><dt>Period</dt><dd>2025 → present</dd></div>
+    <div><dt>Role</dt><dd>Design &amp; implementation</dd></div>
+    <div><dt>Scale</dt><dd>~19 modules · ~11k lines</dd></div>
+    <div><dt>Tests</dt><dd>~3.4k lines</dd></div>
+    <div><dt>Status</dt><dd>In production</dd></div>
+  </dl>
+    <article class="prose-long">
+
+  <p class="lead-in">A model asked for a citation always returns one — whether it read it or wrote it.
+  So the citation is not the evidence. The corpus is.</p>
+
+  <div class="callout reveal"><p>This page describes the engineering approach at a high level. Source code, customer data and proprietary implementation details remain private.</p></div>
+
+  <h2>Problem</h2>
+  <p>A building-energy platform needs a structured technical model of every asset it simulates:
+  geometry, envelope composition, HVAC equipment, operating schedules, metered consumption. That model
+  was assembled by an engineer reading technical audit PDFs by hand — dense, inconsistent French
+  documents mixing prose, regulatory tables and equipment nameplates.</p>
+
+  <p>A first retrieval-augmented implementation already existed: a single top-K vector search feeding
+  one prompt per group of parameters. It produced values. But nothing in it could answer the two
+  questions that decide whether an extraction pipeline is usable in production:</p>
+
+  <ol>
+    <li><strong>Is this value actually supported by the documents?</strong></li>
+    <li><strong>When a value is missing or wrong, which part of the system lost it?</strong></li>
+  </ol>
+
+  <p>Without answers to both, every output needs full manual re-verification — and the pipeline saves
+  nothing.</p>
+
+  <h2>Why audits defeat naive retrieval</h2>
+  <ul>
+    <li><strong>A single query cannot serve every field.</strong> The question that finds a wall
+    U-value is not the question that finds a ventilation schedule.</li>
+    <li><strong>Half of what an audit hangs its facts on is not semantic.</strong> Equipment tags,
+    physical symbols, coded references and raw figures are <em>tokens</em>. Dense embeddings are the
+    wrong instrument for them.</li>
+    <li><strong>Audits describe two worlds at once.</strong> The building as it stands, and the
+    building as a retrofit study proposes it should become — both in the same register, often in the
+    same sentence.</li>
+    <li><strong>A missing value and a wrong value look identical downstream.</strong> A
+    plausible-looking number in the wrong field is worse than an empty field, because nothing
+    flags it.</li>
+  </ul>
+
+  <h2>Architecture</h2>
+  <p>Seven layers. The point of the decomposition is not modularity for its own sake — it is that each
+  layer can fail <strong>separately and observably</strong>, so a missing value has an owner.</p>
+
+  <figure class="figure reveal">
+    <div class="figure__frame">
+    <ol class="flow">
+      <li class="flow__step"><span class="n">1</span><h4>Structure</h4><p>What the building <em>is</em> — functional uses read from the documents alone, and their identity.<span class="fail">fails as: a use is never discovered, so nothing can be routed to it</span></p></li>
+      <li class="flow__step"><span class="n">2</span><h4>Inventory</h4><p>What it <em>contains</em> — every machine and envelope element, read page by page in bounded batches, each carrying its own identity.<span class="fail">fails as: a machine is missed, or two machines are merged into one</span></p></li>
+      <li class="flow__step"><span class="n">3</span><h4>Exhaustive scan</h4><p>What it <em>states</em> — scalar values swept from every page, in bounded batches. Exhaustive coverage replaces a single top-K search.<span class="fail">fails as: a value is on a page the scan read but did not recognise</span></p></li>
+      <li class="flow__step"><span class="n">4</span><h4>Targeted retrieval</h4><p>What the scan <em>missed</em> — one purpose-built query per field still empty, answered by hybrid search at increasing depth.<span class="fail">fails as: retrieval never surfaces the page holding the answer</span></p></li>
+      <li class="flow__step flow__step--key"><span class="n">5</span><h4>Evidence</h4><p>What the documents <em>actually support</em> — three cascading checks, resolving to one of nine verdicts rather than a boolean.<span class="fail">fails as: a value is rejected although the corpus does support it</span></p></li>
+      <li class="flow__step"><span class="n">6</span><h4>Normalisation</h4><p>The source expression → the domain value, plus the rule applied. Conversion happens in code, never in the model.<span class="fail">fails as: an expression form the converter does not recognise</span></p></li>
+      <li class="flow__step"><span class="n">7</span><h4>Routing</h4><p>Which functional use, or which machine, each value belongs to.<span class="fail">fails as: a correct value lands on the wrong machine</span></p></li>
+    </ol>
+    </div>
+    <figcaption>The reading pipeline. Each layer answers one question and fails in one identifiable way — which is what makes a miss attributable instead of being blamed on <b>the model</b>.</figcaption>
+  </figure>
+
+  <h2>Engineering decisions</h2>
+
+  <h3>1 — Evidence, not citation</h3>
+  <p>Every claimed value passes three cascading checks against the corpus itself:</p>
+  <ul>
+    <li>the cited document and page <strong>exist</strong>;</li>
+    <li>the quoted sentence is <strong>actually present</strong> on that page — tolerant to accents,
+    casing and table-cell separators;</li>
+    <li>the value appears in the sentence <strong>and</strong> the sentence describes the
+    <strong>current state</strong>.</li>
+  </ul>
+  <p>The last check matters most. <em>“Replace the 100 kW boiler with a 150 kW unit”</em> contains
+  “150 kW”, is quoted faithfully, and proves no 150 kW boiler is installed. The gate resolves to one of
+  nine distinct verdicts rather than accept/reject, so a rejection says <em>why</em>: wrong page, value
+  absent from the quotation, future state, and so on. That distinction is what turns a rejection into a
+  fixable diagnosis.</p>
+
+  <h3>2 — A closed vocabulary</h3>
+  <p>An extractor that invents a destination field is worse than one that finds nothing: a
+  plausible-but-nonexistent path makes the value disappear without raising an error. Every claimed path
+  is resolved against the business schema, with enumeration, bounds and unit checked. An unresolved path
+  becomes an explicitly <strong>unsupported field</strong> — never the nearest plausible neighbour.</p>
+
+  <h3>3 — The model reads, the code converts</h3>
+  <p>The model is asked for the expression <strong>as written</strong>, not for “the value in kW”.
+  Conversion happens in deterministic code, and the stored value keeps its source expression, its
+  conversion factor and the rule applied.</p>
+  <p>Ten numeric forms are recognised — scalar, range, tolerance, inequality, sum, dimensions, list,
+  schedule, time range, absence — because <code>re.findall(...)[0]</code> reads <code>50 + 24 kW</code>
+  as <code>50</code>, and <code>45–50 %</code> as <code>45</code>.</p>
+
+  <h3>4 — Hybrid, field-level retrieval</h3>
+  <p>Each query names its own field: the concept, the expected unit, French domain synonyms, the machine
+  or zone it belongs to, and the words that would signal a <em>recommendation</em> rather than a
+  statement of fact.</p>
+  <p>That query is answered by three searches — dense, full-text and literal — fused by rank, reranked,
+  then deepened in steps <strong>only when the shallow step returned nothing</strong>. Depth is spent
+  where it is needed rather than uniformly.</p>
+
+  <h3>5 — Per-layer diagnostics</h3>
+  <p>Every decision is counted, so a missing value is attributed to the layer that lost it instead of
+  the useless verdict “the value is wrong”. This is what turns an evaluation run into a work queue.</p>
+
+  <h2>Evaluation</h2>
+  <p>I built the R&amp;D harness around the pipeline: upstream and downstream adapters, scoring against
+  reference models filled in by an engineer, failure attribution by responsible layer, multi-building
+  aggregation (pooled cells, not an average of percentages), and two exports — an exhaustive one for
+  development and a readable one for the engineer, where every value carries its provenance and its
+  fate.</p>
+
+  <p><strong>Pipeline economics</strong> on a representative 33-page audit: about <strong>2
+  minutes</strong>, about <strong>32 model calls</strong>, roughly <strong>310k input tokens</strong>,
+  for a model cost around <strong>$0.10</strong> per building — with a complete equipment inventory,
+  each machine carrying its own identity.</p>
+
+  <p><strong>Before / after bench.</strong> I replay the production path and the new one over the same
+  PDFs, the same vector table and the same pinned model, scored by the same projector. Across three
+  sites: recall is at least equivalent, and identification of system families improves.</p>
+
+  <p><strong>Exact-match is not yet a net win.</strong> The new pipeline answers more often, so it is
+  also visibly wrong more often. I am deliberately not converting that into a “+X % accuracy” claim. The
+  honest summary is that coverage and traceability improved while exact-match parity is still being
+  worked — a system that declines to answer has an artificially clean exact-match score, and reporting
+  that is part of the engineering.</p>
+
+  <p>One finding worth recording: the <strong>targeted</strong> layer — one query per field the
+  exhaustive scan left empty — contributed more accepted values than the exhaustive scan itself. The
+  gain lives in knowing what you are missing, not in reading more.</p>
+
+  <h2>Technologies</h2>
+  <p>Python · Pydantic · PostgreSQL · pgvector · dense retrieval · PostgreSQL full-text search ·
+  literal / token retrieval · reciprocal rank fusion · reranking · LLM APIs (Gemini-class models via
+  OpenRouter) · retry and backoff for batched model calls · AWS Lambda · Amazon S3 · DynamoDB · pytest</p>
+
+  <h2>What I took from it</h2>
+  <ul>
+    <li><strong>A verification layer is worth more than a better prompt.</strong> Most of the
+    reliability came from refusing values, not from extracting more of them.</li>
+    <li><strong>Uniform retrieval depth is waste.</strong> Laddering depth per field, only on failure,
+    bought coverage at roughly constant cost.</li>
+    <li><strong>Attribution changes the conversation.</strong> Once a failure has an owner layer, model
+    quality stops being the explanation for everything.</li>
+    <li><strong>Answering more often looks worse before it looks better</strong> — and saying so is part
+    of the job.</li>
+  </ul>
+
+  <h2>Links</h2>
+  <p>Private — company codebase. No source, prompts or customer data are published.
+  <a href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf/blob/main/projects/document-intelligence.md">Case study on GitHub →</a></p>
+
+    </article>
+    <nav class="pager" aria-label="Other projects">
+      <span></span>
+      <a href="annual-energy-model.html"><span class="k">Next</span>Annual Energy Model →</a>
+    </nav>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="wrap footer__inner">
+    <span>Abderaouf Boudia — AI Engineer &amp; Data Scientist</span>
+    <span>
+      <a href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf">Source</a> ·
+      <a href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf/raw/main/cv/Abderaouf-Boudia-CV.pdf">CV</a> ·
+      <a href="https://www.linkedin.com/in/abderaouf-boudia-4bb166174/">LinkedIn</a>
+    </span>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var btn = document.getElementById('theme-toggle');
+    btn.addEventListener('click', function () {
+      var current = root.dataset.theme ||
+        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      var next = current === 'dark' ? 'light' : 'dark';
+      root.dataset.theme = next;
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var items = document.querySelectorAll('.reveal');
+    if (!('IntersectionObserver' in window)) {
+      items.forEach(function (el) { el.classList.add('is-in'); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-in');
+        io.unobserve(entry.target);
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+    items.forEach(function (el) { io.observe(el); });
+  })();
+</script>
+
+</body>
+</html>

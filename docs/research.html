@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Research — Abderaouf Boudia</title>
+<meta name="description" content="Peer-reviewed research in computer vision and biomedical signal processing: interactive segmentation for borehole imagery (IEEE IGARSS 2025) and fall-risk assessment from gait analysis.">
+<meta name="author" content="Abderaouf Boudia">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Research — Abderaouf Boudia">
+<meta property="og:description" content="Peer-reviewed research in computer vision and biomedical signal processing: interactive segmentation for borehole imagery (IEEE IGARSS 2025) and fall-risk assessment from gait analysis.">
+<link rel="canonical" href="https://boudia-abderaouf.github.io/BOUDIA-Abderaouf/research.html">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230b6e68'/><text y='.9em' x='50%25' text-anchor='middle' font-size='62' font-family='ui-monospace,monospace' fill='%23fff'>A</text></svg>">
+<link rel="stylesheet" href="styles.css">
+<script>
+  // Applied before first paint so the chosen theme never flashes.
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t;
+  } catch (e) {}
+</script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav__inner">
+    <a class="nav__mark" href="index.html">abderaouf&nbsp;boudia</a>
+    <nav class="nav__links" aria-label="Sections">
+      <a href="index.html#work">Work</a>
+      <a href="research.html" aria-current="page">Research</a>
+      <a href="index.html#experience">Experience</a>
+      <a href="index.html#skills">Skills</a>
+      <a href="index.html#about">About</a>
+      <a class="nav__cta" href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf/raw/main/cv/Abderaouf-Boudia-CV.pdf">CV</a>
+      <button class="theme-toggle" type="button" id="theme-toggle" aria-label="Switch colour theme">
+        <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap crumb"><a href="index.html">Home</a> <span aria-hidden="true">/</span> Research</div>
+
+  <div class="wrap page-head">
+    <h1>Research</h1>
+    <p class="lede">Two peer-reviewed manuscripts, in computer vision and in biomedical signal
+    processing. Author lists and positions reproduce the papers exactly; where I am not first author,
+    that is stated. DOIs are recorded only where they exist — nothing here is inferred.</p>
+  </div>
+
+  <div class="wrap">
+  <section style="padding-top:0">
+    <article class="prose-long reveal">
+      <h2 style="margin-top:0;border-top:0;padding-top:0">Enhanced Foundation Model-Based Interactive
+      Segmentation for Borehole Image Data</h2>
+
+      <p class="pub__authors">Imane Baho*, Eya Ghamgui*, <strong>Abderaouf Boudia</strong>,
+      Franco Marchesoni, Josselin Kherroubi — <em>third author; *the first two authors are marked in the
+      paper as having contributed equally.</em></p>
+      <p class="pub__meta">IEEE IGARSS 2025 · SLB, France (co-affiliations UVSQ, ENS-PS) ·
+      <b>Published</b> · DOI not recorded</p>
+
+      <p>SAM and its weakly-supervised adaptation WeSAM both underperform on ultrasonic borehole
+      imagery, where a moulded pipe's manufacturing patterns mimic corrosion defects. The paper improves
+      WeSAM in two places, both at the <em>prompt</em> end of the architecture: error-driven iterative
+      click simulation in place of random point sampling, and SegNext-style dense prompt encoding that
+      feeds the previous mask back into the next interaction. Evaluated on the THBK pipe-thickness
+      dataset — 180 ultrasonic images with binary masks — the combined approach leads at every click
+      budget, for a reported gain of over 13 IoU points.</p>
+
+  <div class="tablewrap reveal">
+    <table class="datatable">
+      <caption>IoU (%) by click budget (Table I)</caption>
+      <thead><tr><th>Method</th><th class="num">1 click</th><th class="num">10 clicks</th><th class="num">20 clicks</th></tr></thead>
+      <tbody>
+      <tr><td>SAM</td><td class="num">5.02</td><td class="num">43.81</td><td class="num">49.68</td></tr>
+      <tr><td>WeSAM</td><td class="num">2.64</td><td class="num">51.57</td><td class="num">52.15</td></tr>
+      <tr><td>Ours 1</td><td class="num">2.51</td><td class="num">54.67</td><td class="num">56.79</td></tr>
+      <tr><td>SegNext</td><td class="num">8.55</td><td class="num">52.32</td><td class="num">73.83</td></tr>
+      <tr class="is-key"><td>Ours 2</td><td class="num">14.14</td><td class="num">65.34</td><td class="num">83.95</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+      <p><strong>Research area</strong> — computer vision · interactive image segmentation ·
+      weakly-supervised source-free domain adaptation · foundation models · non-destructive
+      evaluation.</p>
+
+      <div class="card__links">
+        <a href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf/blob/main/articles/Paper_IGARSS_InterSEG.pdf">Paper (PDF) →</a>
+        <a href="projects/interseg-wesam.html">Full case study and my contribution →</a>
+      </div>
+    </article>
+  </section>
+
+  <section>
+    <article class="prose-long reveal">
+      <h2 style="margin-top:0">Fall Risk Assessment Using Gait Analysis and Wearable Sensors:
+      A Machine Learning Approach</h2>
+
+      <p class="pub__authors">W. Dib, <strong>A. Boudia</strong>, F. Boukhedimi, O. Kerdjidj —
+      <em>second author.</em></p>
+      <p class="pub__meta">Submitted to an IEEE journal · Center for Development of Advanced
+      Technologies (CDTA), Algiers &amp; École Nationale Polytechnique, Algeria ·
+      <b>Under review</b> · no DOI — not yet published</p>
+
+      <p>Clinical fall-risk instruments are accurate and impractical; most sensor alternatives in the
+      literature buy accuracy with many body-mounted sensors or with a network too heavy for a wearable.
+      This study constrains itself to a single lower-back accelerometer and measures the
+      accuracy-versus-cost trade-off explicitly. Four published gait-cycle segmentation algorithms are
+      implemented and compared, per-cycle statistical and spatio-temporal features extracted, PCA
+      applied at 99 % retained variance, and eight classifiers benchmarked on 71 older adults from the
+      public PhysioNet LTMM database.</p>
+
+      <p>The finding is the trade-off, not the headline number: KNN and the deep network are level on
+      accuracy and separated by more than three orders of magnitude in execution time.</p>
+
+  <div class="tablewrap reveal">
+    <table class="datatable">
+      <caption>Classifier performance (Table VI)</caption>
+      <thead><tr><th>Model</th><th class="num">Train %</th><th class="num">Val %</th><th class="num">Test %</th><th class="num">ROC %</th><th class="num">Time (s)</th></tr></thead>
+      <tbody>
+      <tr class="is-key"><td>KNN (k = 3)</td><td class="num">93.62</td><td class="num">88.54</td><td class="num">89.7</td><td class="num">90</td><td class="num">0.008</td></tr>
+      <tr><td>DNN</td><td class="num">96.38</td><td class="num">88.85</td><td class="num">89.4</td><td class="num">89</td><td class="num">29</td></tr>
+      <tr><td>SVM (RBF)</td><td class="num">99.52</td><td class="num">87.90</td><td class="num">87.6</td><td class="num">88</td><td class="num">0.25</td></tr>
+      <tr><td>DT + AdaBoost</td><td class="num">100</td><td class="num">86.62</td><td class="num">85.8</td><td class="num">86</td><td class="num">1.8</td></tr>
+      <tr><td>RF</td><td class="num">100</td><td class="num">85.67</td><td class="num">84.9</td><td class="num">85</td><td class="num">1.08</td></tr>
+      <tr><td>RF + AdaBoost</td><td class="num">100</td><td class="num">86.62</td><td class="num">84.9</td><td class="num">85</td><td class="num">1.12</td></tr>
+      <tr><td>Decision tree</td><td class="num">94.43</td><td class="num">79.62</td><td class="num">77.2</td><td class="num">78</td><td class="num">0.05</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+      <p><strong>Research area</strong> — biomedical signal processing · inertial sensing · gait
+      analysis · machine learning · wearable health.</p>
+
+      <div class="card__links">
+        <a href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf/blob/main/articles/Fall_Risk_Assessment_Using_Gait_Analysis.pdf">Manuscript (PDF) →</a>
+        <a href="projects/fall-risk-assessment.html">Full case study and my contribution →</a>
+      </div>
+    </article>
+  </section>
+
+  <section>
+    <div class="prose-long reveal">
+      <h2 style="margin-top:0">Ongoing</h2>
+      <p><strong>Hourly building energy forecasting.</strong> Deep-learning models predicting a
+      building's heating and cooling load hour by hour, with sequence and gradient-boosting baselines. A
+      manuscript is planned; no results are published and nothing has been submitted.
+      <a href="projects/hourly-energy-forecasting.html">Engineering write-up →</a></p>
+    </div>
+  </section>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="wrap footer__inner">
+    <span>Abderaouf Boudia — AI Engineer &amp; Data Scientist</span>
+    <span>
+      <a href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf">Source</a> ·
+      <a href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf/raw/main/cv/Abderaouf-Boudia-CV.pdf">CV</a> ·
+      <a href="https://www.linkedin.com/in/abderaouf-boudia-4bb166174/">LinkedIn</a>
+    </span>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var btn = document.getElementById('theme-toggle');
+    btn.addEventListener('click', function () {
+      var current = root.dataset.theme ||
+        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      var next = current === 'dark' ? 'light' : 'dark';
+      root.dataset.theme = next;
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var items = document.querySelectorAll('.reveal');
+    if (!('IntersectionObserver' in window)) {
+      items.forEach(function (el) { el.classList.add('is-in'); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-in');
+        io.unobserve(entry.target);
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+    items.forEach(function (el) { io.observe(el); });
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>National Building Data Platform — Analytics Engineering — Abderaouf Boudia</title>
+<meta name="description" content="A dbt project over the French national building database: staging to marts, one analysis-ready fact per département, PostGIS spatial indexing and contract tests.">
+<meta name="author" content="Abderaouf Boudia">
+<meta property="og:type" content="article">
+<meta property="og:title" content="National Building Data Platform — Analytics Engineering — Abderaouf Boudia">
+<meta property="og:description" content="A dbt project over the French national building database: staging to marts, one analysis-ready fact per département, PostGIS spatial indexing and contract tests.">
+<link rel="canonical" href="https://boudia-abderaouf.github.io/BOUDIA-Abderaouf/projects/dbt-data-platform.html">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230b6e68'/><text y='.9em' x='50%25' text-anchor='middle' font-size='62' font-family='ui-monospace,monospace' fill='%23fff'>A</text></svg>">
+<link rel="stylesheet" href="../styles.css">
+<script>
+  // Applied before first paint so the chosen theme never flashes.
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t;
+  } catch (e) {}
+</script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav__inner">
+    <a class="nav__mark" href="../index.html">abderaouf&nbsp;boudia</a>
+    <nav class="nav__links" aria-label="Sections">
+      <a href="../index.html#work" aria-current="page">Work</a>
+      <a href="../research.html">Research</a>
+      <a href="../index.html#experience">Experience</a>
+      <a href="../index.html#skills">Skills</a>
+      <a href="../index.html#about">About</a>
+      <a class="nav__cta" href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf/raw/main/cv/Abderaouf-Boudia-CV.pdf">CV</a>
+      <button class="theme-toggle" type="button" id="theme-toggle" aria-label="Switch colour theme">
+        <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap crumb"><a href="../index.html">Home</a> <span aria-hidden="true">/</span>
+    <a href="../index.html#work">Work</a> <span aria-hidden="true">/</span> National Building Data Platform</div>
+
+  <div class="wrap page-head">
+    <h1>National Building Data Platform — Analytics Engineering</h1>
+    <p class="lede">Turning France's national building database — authoritative, public, and unusable raw — into analysis-ready facts, one <em>département</em> at a time. <span class="status status--live">In production</span></p>
+  </div>
+
+  <div class="wrap">
+  <dl class="meta reveal">
+    <div><dt>Context</dt><dd>Cedrus Solutions</dd></div>
+    <div><dt>Role</dt><dd>dbt architecture &amp; SQL</dd></div>
+    <div><dt>Domain</dt><dd>Analytics engineering</dd></div>
+    <div><dt>Warehouse</dt><dd>PostgreSQL / PostGIS</dd></div>
+    <div><dt>Partitioning</dt><dd>~95 départements</dd></div>
+    <div><dt>Status</dt><dd>In production</dd></div>
+  </dl>
+    <article class="prose-long">
+
+  <p class="lead-in">Partitioning was not an ops detail here. Making the <em>département</em> the unit
+  of build is what made the whole thing operable, testable and re-runnable.</p>
+
+  <div class="callout reveal"><p>This page describes the engineering approach at a high level. Warehouse configuration, credentials and internal schema details remain private.</p></div>
+
+  <h2>Problem</h2>
+  <p>France publishes a national building database consolidating building geometry, addresses, cadastral
+  parcels, ownership, energy-performance certificates and aggregated local energy-delivery data. It is
+  authoritative and it is public — and in raw form it is unusable for analysis: dozens of interrelated
+  source tables, inconsistent typing, and a volume that makes national-scale joins impractical without
+  deliberate partitioning.</p>
+  <p>What was needed: analysis-ready tables, <strong>one row per building group</strong>, enriched with
+  addresses, parcels, certificate data and energy indicators, refreshed as new versions of the source
+  database are released.</p>
+
+  <h2>Two constraints that shaped the design</h2>
+  <ul>
+    <li><strong>Scale forces partitioning.</strong> Building the whole country as one table is not
+    viable. Each <em>département</em> is its own materialisation — around 95 runs — so every build stays
+    bounded and independently re-runnable.</li>
+    <li><strong>The source schema moves.</strong> Tables and columns change between releases, so source
+    declarations and model scaffolding have to be generated rather than hand-written.</li>
+  </ul>
+
+  <h2>Architecture</h2>
+
+  <figure class="figure reveal">
+    <div class="figure__frame">
+    <ol class="flow">
+      <li class="flow__step"><span class="n">1</span><h4>Sources</h4><p>Source tables declared per source-database version. The declarations are generated from the live database by macros, not maintained by hand — which is what survives an upstream schema change.</p></li>
+      <li class="flow__step"><span class="n">2</span><h4>Staging</h4><p>One model per source entity: addresses, building constructions, building groups, parcels, owners, certificate records, and the aggregated electricity, gas and heat-network delivery tables. Typing, renaming, safe numeric casts, cleanup. Materialised as tables.</p></li>
+      <li class="flow__step"><span class="n">3</span><h4>Intermediate</h4><p>Joins and enrichment — the building group assembled from its components, one-to-many relations collapsed into per-group structures.</p></li>
+      <li class="flow__step flow__step--key"><span class="n">4</span><h4>Marts</h4><p>The analysis-ready fact: exactly one row per building-group identifier. Address lists are exploded with a lateral unnest and fall back to the canonical address when empty; parcels are aggregated per group.</p></li>
+    </ol>
+    </div>
+    <figcaption>The layering is standard dbt, applied strictly. What is not standard is the run unit: the target <b>département</b> is a run variable, so one command builds one département and a loop builds the country.</figcaption>
+  </figure>
+
+  <h2>Engineering decisions</h2>
+
+  <h3>Indexes as post-hooks, not as an afterthought</h3>
+  <p>Every mart build creates its own B-tree indexes on the join keys and <strong>GiST indexes on the
+  geometry columns</strong> — building group, address, aggregated parcels — in a post-hook, each guarded
+  so a failure on one index does not abort the build. Downstream spatial queries are the entire point of
+  the table; an unindexed geometry column makes it useless.</p>
+
+  <h3>Session guards on every model</h3>
+  <p>Pre-hooks set a lock timeout, a statement timeout and an idle-in-transaction timeout. On a warehouse
+  this size, a build that blocks forever while holding a lock is a worse outcome than a build that
+  fails. Timeouts are part of correctness when other people share the warehouse.</p>
+
+  <h3>Code generation over hand-maintenance</h3>
+  <p>Macros generate source declarations and model YAML scaffolding from the live source database, and
+  resolve the source name from the configured source-database version. When the upstream release
+  changes, declarations are regenerated rather than patched. The macro layer paid for itself at the
+  first schema change.</p>
+
+  <h3>Tests that encode the contract</h3>
+  <p>The grain is asserted — not-null plus unique on the building-group key — relationships back to the
+  parent intermediate models are tested, and address uniqueness is tested at <em>warn</em> severity: it
+  is a quality signal, not a build stopper. Column descriptions and types live in the schema files, so
+  the generated documentation carries real lineage rather than an empty graph.</p>
+
+  <h2>Wider data work in the same programme</h2>
+  <p>Adjacent Python work I contributed to: statistical analysis and random-forest modeling of tertiary
+  buildings; cross-referencing of geographic and energy datasets over PostgreSQL/PostGIS with MapServer
+  (WMS/WFS) publication; KNN-based imputation and integrity reporting across public data sources; and
+  property-value prediction with XGBoost on the French open transaction dataset.</p>
+
+  <h2>Technologies</h2>
+  <p>dbt · SQL · PostgreSQL · PostGIS (GiST spatial indexes, Lambert-93 geometries) · Jinja macros ·
+  dbt_utils · dbt codegen · Bash automation</p>
+
+  <h2>Links</h2>
+  <p>Private — company codebase. The underlying national building database and the property transaction
+  dataset are French public open data.
+  <a href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf/blob/main/projects/dbt-data-platform.md">Case study on GitHub →</a></p>
+
+    </article>
+    <nav class="pager" aria-label="Other projects">
+      <a href="hourly-energy-forecasting.html"><span class="k">Previous</span>← Hourly Energy Forecasting</a>
+      <a href="fall-risk-assessment.html"><span class="k">Next</span>Fall Risk Assessment →</a>
+    </nav>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="wrap footer__inner">
+    <span>Abderaouf Boudia — AI Engineer &amp; Data Scientist</span>
+    <span>
+      <a href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf">Source</a> ·
+      <a href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf/raw/main/cv/Abderaouf-Boudia-CV.pdf">CV</a> ·
+      <a href="https://www.linkedin.com/in/abderaouf-boudia-4bb166174/">LinkedIn</a>
+    </span>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var btn = document.getElementById('theme-toggle');
+    btn.addEventListener('click', function () {
+      var current = root.dataset.theme ||
+        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      var next = current === 'dark' ? 'light' : 'dark';
+      root.dataset.theme = next;
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var items = document.querySelectorAll('.reveal');
+    if (!('IntersectionObserver' in window)) {
+      items.forEach(function (el) { el.classList.add('is-in'); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-in');
+        io.unobserve(entry.target);
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+    items.forEach(function (el) { io.observe(el); });
+  })();
+</script>
+
+</body>
+</html>

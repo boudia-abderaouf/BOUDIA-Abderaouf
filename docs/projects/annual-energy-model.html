@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Annual Building Energy Consumption Modeling — Abderaouf Boudia</title>
+<meta name="description" content="A machine-learning surrogate for dynamic thermal simulation: Monte-Carlo building sampling, orchestrated physics simulation, per-climate-zone regressors, with independently versioned data and models.">
+<meta name="author" content="Abderaouf Boudia">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Annual Building Energy Consumption Modeling — Abderaouf Boudia">
+<meta property="og:description" content="A machine-learning surrogate for dynamic thermal simulation: Monte-Carlo building sampling, orchestrated physics simulation, per-climate-zone regressors, with independently versioned data and models.">
+<link rel="canonical" href="https://boudia-abderaouf.github.io/BOUDIA-Abderaouf/projects/annual-energy-model.html">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230b6e68'/><text y='.9em' x='50%25' text-anchor='middle' font-size='62' font-family='ui-monospace,monospace' fill='%23fff'>A</text></svg>">
+<link rel="stylesheet" href="../styles.css">
+<script>
+  // Applied before first paint so the chosen theme never flashes.
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t;
+  } catch (e) {}
+</script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav__inner">
+    <a class="nav__mark" href="../index.html">abderaouf&nbsp;boudia</a>
+    <nav class="nav__links" aria-label="Sections">
+      <a href="../index.html#work" aria-current="page">Work</a>
+      <a href="../research.html">Research</a>
+      <a href="../index.html#experience">Experience</a>
+      <a href="../index.html#skills">Skills</a>
+      <a href="../index.html#about">About</a>
+      <a class="nav__cta" href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf/raw/main/cv/Abderaouf-Boudia-CV.pdf">CV</a>
+      <button class="theme-toggle" type="button" id="theme-toggle" aria-label="Switch colour theme">
+        <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap crumb"><a href="../index.html">Home</a> <span aria-hidden="true">/</span>
+    <a href="../index.html#work">Work</a> <span aria-hidden="true">/</span> Annual Energy Model</div>
+
+  <div class="wrap page-head">
+    <h1>Annual Building Energy Consumption Modeling</h1>
+    <p class="lede">A learned stand-in for dynamic thermal simulation — milliseconds instead of minutes per building, with a measured and reproducible gap to the physics it replaces. <span class="status status--live">In production</span></p>
+  </div>
+
+  <div class="wrap">
+  <dl class="meta reveal">
+    <div><dt>Context</dt><dd>Cedrus Solutions</dd></div>
+    <div><dt>Role</dt><dd>Pipeline, models, release tooling</dd></div>
+    <div><dt>Domain</dt><dd>ML · energy analytics</dd></div>
+    <div><dt>Orchestration</dt><dd>Prefect</dd></div>
+    <div><dt>Tracking</dt><dd>MLflow</dd></div>
+    <div><dt>Status</dt><dd>In production</dd></div>
+  </dl>
+    <article class="prose-long">
+
+  <p class="lead-in">The model was the least uncertain part of this project. Everything expensive lived
+  in manufacturing a training set you could trust.</p>
+
+  <div class="callout reveal"><p>This page describes the engineering approach at a high level. Source code, customer data and proprietary implementation details remain private.</p></div>
+
+  <h2>Problem</h2>
+  <p>Estimating a building's annual heating and cooling demand properly requires dynamic thermal
+  simulation: a physics engine, a fully specified building, and minutes of compute per variant. That is
+  far too slow to sit behind an interactive product, and it cannot be run across a portfolio of assets
+  on demand.</p>
+  <p>The goal was a <strong>surrogate</strong>: something that reproduces the simulator's answer in
+  milliseconds, across climate zones and countries, with a measured gap to the physics it replaces.</p>
+
+  <h2>Context</h2>
+  <p>The training data does not exist in the wild — it has to be manufactured. That makes this as much a
+  data-generation and orchestration problem as a modeling one: sample a plausible building population,
+  simulate every sample, collect the results, and only then train. Each stage fails on its own schedule,
+  and a simulation run is expensive enough that silently losing or corrupting results is the main
+  risk.</p>
+
+  <h2>Architecture</h2>
+
+  <figure class="figure reveal">
+    <div class="figure__frame">
+    <ol class="flow">
+      <li class="flow__step"><span class="n">1</span><h4>Parameter sampling</h4><p>A per-parameter distribution registry — uniform, normal and discrete draws with explicit probabilities, some multiplicative on a geometry term — produces a synthetic building population. Every parameter of the schema has a declared distribution rather than an ad-hoc range in code.</p></li>
+      <li class="flow__step"><span class="n">2</span><h4>Physics simulation</h4><p>Each sampled building is driven through a commercial dynamic thermal simulation engine, programmatically and in chunks. The orchestration detects truncated result chunks and re-simulates them, enforces per-simulation timeouts, and dismisses blocking dialogs so an unattended batch actually finishes.</p></li>
+      <li class="flow__step"><span class="n">3</span><h4>Result collection</h4><p>Results are aligned by building identifier and collected into one dataset per climate zone, with derived geometry terms computed at collection time.</p></li>
+      <li class="flow__step"><span class="n">4</span><h4>Training</h4><p>A multi-layer perceptron per climate zone over ~22–24 envelope, geometry, systems and usage features. Min-max scaling comes from a dictionary shared across all zones of a country, so zones stay mutually comparable.</p></li>
+      <li class="flow__step flow__step--key"><span class="n">5</span><h4>Evaluation &amp; release</h4><p>Metrics, plots, a versioned snapshot in the local model registry, and an automatic comparison against the previous release for the same country.</p></li>
+    </ol>
+    </div>
+    <figcaption>Generation feeds training directly: task-level dependencies mean a zone starts training as soon as <b>its own</b> dataset lands, rather than waiting for the whole country to finish simulating.</figcaption>
+  </figure>
+
+  <p>Geography is first-class throughout — <code>continent → country → climate zone</code>, with a
+  worldwide zone registry and country groups — so adding a country is configuration rather than code.</p>
+
+  <h2>Engineering decisions</h2>
+
+  <h3>Versioning is separate for data and for models</h3>
+  <p>A dataset version and a training version are independent labels. Retraining on an existing dataset,
+  and regenerating data for an unchanged trainer, are both first-class operations instead of a
+  destructive overwrite. Manifests record generated samples, simulation results and per-zone datasets,
+  with SHA-256 fingerprints of the code that produced them. This is what makes a six-month-old run
+  explainable.</p>
+
+  <h3>A local model registry, independent of the tracking server</h3>
+  <p>Releases are snapshotted into a registry and compared to the previous release for the same country.
+  Comparison emits Markdown, CSV and JSON reports plus a PDF of prediction scatter plots — so “is the
+  new model better?” has a reproducible artifact rather than a recollection. Release can fire
+  automatically at the end of a country's training.</p>
+
+  <h3>Metrics chosen for the decision they inform</h3>
+  <p>Beyond MAE and R², evaluation reports the share of predictions within ±1 / ±5 / ±10 kWh, a mean
+  relative error capped so near-zero denominators cannot dominate, and the share of predictions inside a
+  ±5 % margin. An aggregate R² hides exactly the failure mode that matters here — a small set of
+  buildings being badly wrong. Relative and absolute error are also reported per chunk and as bias
+  box-plots, which surfaces systematic bias by building regime instead of averaging it away.</p>
+
+  <h3>A GPU training path that does not change the serving artifact</h3>
+  <p>An experimental trainer fits the network in PyTorch on GPU — batch-norm, large batches, the dataset
+  resident in VRAM — then folds batch-norm and target de-normalisation into the final layer and
+  transplants the weights into a strictly equivalent scikit-learn estimator. Training speed, same
+  deployment surface.</p>
+
+  <h2>Evaluation</h2>
+  <ul>
+    <li>Train / validation / test splits per zone, fixed seed.</li>
+    <li>MAE, R², capped mean relative error, in-margin rate, error distributions, predicted-vs-true
+    scatter, per-chunk bias.</li>
+    <li>Version-to-version comparison against a shared reference dataset, with an explicit status per
+    zone and target rather than one headline number.</li>
+    <li>Unit tests covering the versioning, release and comparison logic.</li>
+  </ul>
+  <p>Quantitative results are internal and are not published here.</p>
+
+  <h2>Technologies</h2>
+  <p>Python · scikit-learn · PyTorch · NumPy · pandas · SciPy · Prefect · MLflow · Pydantic · joblib ·
+  Matplotlib · pytest · Docker · Poetry · loguru</p>
+
+  <h2>What I took from it</h2>
+  <ul>
+    <li><strong>Generating the dataset is the project.</strong></li>
+    <li><strong>Reproducibility has to be designed in, not added.</strong> Separating dataset and
+    training versions, and fingerprinting the code, is what made old runs explainable.</li>
+    <li><strong>A comparison report beats a metric.</strong> The release-vs-previous artifact is what
+    actually gets used when deciding to ship.</li>
+  </ul>
+
+  <h2>Links</h2>
+  <p>Private — company codebase. <a href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf/blob/main/projects/annual-energy-model.md">Case study on GitHub →</a></p>
+
+    </article>
+    <nav class="pager" aria-label="Other projects">
+      <a href="document-intelligence.html"><span class="k">Previous</span>← Verifiable Document Intelligence</a>
+      <a href="hourly-energy-forecasting.html"><span class="k">Next</span>Hourly Energy Forecasting →</a>
+    </nav>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="wrap footer__inner">
+    <span>Abderaouf Boudia — AI Engineer &amp; Data Scientist</span>
+    <span>
+      <a href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf">Source</a> ·
+      <a href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf/raw/main/cv/Abderaouf-Boudia-CV.pdf">CV</a> ·
+      <a href="https://www.linkedin.com/in/abderaouf-boudia-4bb166174/">LinkedIn</a>
+    </span>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var btn = document.getElementById('theme-toggle');
+    btn.addEventListener('click', function () {
+      var current = root.dataset.theme ||
+        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      var next = current === 'dark' ? 'light' : 'dark';
+      root.dataset.theme = next;
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var items = document.querySelectorAll('.reveal');
+    if (!('IntersectionObserver' in window)) {
+      items.forEach(function (el) { el.classList.add('is-in'); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-in');
+        io.unobserve(entry.target);
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+    items.forEach(function (el) { io.observe(el); });
+  })();
+</script>
+
+</body>
+</html>

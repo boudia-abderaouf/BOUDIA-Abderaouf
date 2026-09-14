@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fall Risk Assessment Using Gait Analysis and Wearable Sensors — Abderaouf Boudia</title>
+<meta name="description" content="Fall-risk classification from a single lower-back accelerometer: four gait-cycle segmentation algorithms compared, per-cycle features, PCA, and an eight-classifier benchmark on the PhysioNet LTMM database.">
+<meta name="author" content="Abderaouf Boudia">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Fall Risk Assessment Using Gait Analysis and Wearable Sensors — Abderaouf Boudia">
+<meta property="og:description" content="Fall-risk classification from a single lower-back accelerometer: four gait-cycle segmentation algorithms compared, per-cycle features, PCA, and an eight-classifier benchmark on the PhysioNet LTMM database.">
+<link rel="canonical" href="https://boudia-abderaouf.github.io/BOUDIA-Abderaouf/projects/fall-risk-assessment.html">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230b6e68'/><text y='.9em' x='50%25' text-anchor='middle' font-size='62' font-family='ui-monospace,monospace' fill='%23fff'>A</text></svg>">
+<link rel="stylesheet" href="../styles.css">
+<script>
+  // Applied before first paint so the chosen theme never flashes.
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t;
+  } catch (e) {}
+</script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav__inner">
+    <a class="nav__mark" href="../index.html">abderaouf&nbsp;boudia</a>
+    <nav class="nav__links" aria-label="Sections">
+      <a href="../index.html#work" aria-current="page">Work</a>
+      <a href="../research.html">Research</a>
+      <a href="../index.html#experience">Experience</a>
+      <a href="../index.html#skills">Skills</a>
+      <a href="../index.html#about">About</a>
+      <a class="nav__cta" href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf/raw/main/cv/Abderaouf-Boudia-CV.pdf">CV</a>
+      <button class="theme-toggle" type="button" id="theme-toggle" aria-label="Switch colour theme">
+        <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap crumb"><a href="../index.html">Home</a> <span aria-hidden="true">/</span>
+    <a href="../index.html#work">Work</a> <span aria-hidden="true">/</span> Fall Risk Assessment</div>
+
+  <div class="wrap page-head">
+    <h1>Fall Risk Assessment Using Gait Analysis and Wearable Sensors</h1>
+    <p class="lede">How much clinical fall-risk discrimination survives a single accelerometer and a classifier light enough to run in real time? <span class="status ">Research · submitted</span></p>
+  </div>
+
+  <div class="wrap">
+  <dl class="meta reveal">
+    <div><dt>Context</dt><dd>CDTA / École Nationale Polytechnique</dd></div>
+    <div><dt>Period</dt><dd>2022 – 2023</dd></div>
+    <div><dt>Role</dt><dd>Signal processing, features, ML benchmark</dd></div>
+    <div><dt>Authorship</dt><dd>Second author</dd></div>
+    <div><dt>Dataset</dt><dd>PhysioNet LTMM · 71 subjects</dd></div>
+    <div><dt>Status</dt><dd>Submitted — under review</dd></div>
+  </dl>
+    <article class="prose-long">
+
+  <p class="lead-in">The most useful column in the results table is execution time — and it is the one
+  most papers omit.</p>
+
+  <h2>Problem</h2>
+  <p>Falls are a leading cause of injury and death among older adults. Identifying who is at risk
+  <em>before</em> a fall happens is what enables prevention, but the clinical instruments that do it —
+  Timed Up and Go, Berg Balance Scale, supervised gait assessment — are time-consuming, resource-heavy,
+  and observe a person for minutes in a controlled room.</p>
+  <p>Wearable inertial sensors can observe gait continuously instead. Most of the published literature,
+  though, buys accuracy with instrumentation: five or ten sensors across the body, or a deep network
+  that cannot run on an embedded device. Both defeat the purpose — an obtrusive rig is not worn daily,
+  and a model that needs a GPU is not a wearable.</p>
+  <p>This study constrains itself to a <strong>single lower-back accelerometer</strong> and measures the
+  accuracy-versus-cost trade-off explicitly rather than reporting accuracy alone.</p>
+
+  <h2>Dataset</h2>
+  <p>The <strong>Long Term Movement Monitoring (LTMM)</strong> database from PhysioNet — public
+  tri-axial accelerometer and gyroscope recordings from the lower back of <strong>71
+  community-dwelling older adults</strong> (mean age 78.4 ± 4.7, range 65–87), worn on a belt.
+  Participants are labelled fallers or non-fallers from self-reported falls over the preceding year, two
+  or more falls defining a faller. Only the laboratory-recorded portion was used, for measurement
+  standardisation and reproducibility.</p>
+
+  <h2>Method</h2>
+
+  <figure class="figure reveal">
+    <div class="figure__frame">
+    <ol class="flow">
+      <li class="flow__step"><span class="n">1</span><h4>Raw accelerometer signal</h4><p>Single tri-axial sensor at the lower back (L3–L5), laboratory recording at a comfortable self-selected pace.</p></li>
+      <li class="flow__step flow__step--key"><span class="n">2</span><h4>Gait-cycle segmentation</h4><p>Everything downstream depends on locating two events per cycle: Initial Contact (heel strike) and Final Contact (toe-off). Four published algorithms were implemented and compared, not assumed.</p></li>
+      <li class="flow__step"><span class="n">3</span><h4>Feature extraction</h4><p>Per gait cycle: statistical descriptors (mean, signal energy, standard deviation, variance, skewness, min/max) and spatio-temporal gait parameters (cadence, step and stride duration, single- and double-support duration, stance and swing phase, symmetry, step length via the Weinberg estimator).</p></li>
+      <li class="flow__step"><span class="n">4</span><h4>Dimensionality reduction</h4><p>PCA retaining ≥ 99 % of total variance — reached with 10 principal components.</p></li>
+      <li class="flow__step"><span class="n">5</span><h4>Classification</h4><p>Eight models tuned by grid search on a 70 / 10 / 20 split by gait cycle (2,112 / 302 / 604 cycles), scored on accuracy, ROC-AUC, class-conditional precision and recall, and execution time.</p></li>
+    </ol>
+    </div>
+    <figcaption>The segmentation step sets the ceiling for everything after it — which is why four algorithms were compared rather than one chosen: <b>Gonzalez</b> (zero-crossings plus heuristic peak association), <b>Ghersi</b> (acceleration modelled as a modified triangle wave via dynamic time warping), <b>CWT</b> (detrend, low-pass, trapezoidal integration, then continuous wavelet differentiation) and <b>Shin</b> (sliding-window denoising, differential acceleration, zero-crossing detection).</figcaption>
+  </figure>
+
+  <h2>Results</h2>
+  <p>On the held-out test set, the two best models are separated by <strong>more than three orders of
+  magnitude in execution time</strong> and by 0.3 accuracy points. That gap is the paper's actual
+  finding: on this task, the deep model buys nothing it can keep once deployment is a constraint.</p>
+
+  <figure class="figure reveal">
+    <div class="figure__frame">
+    <svg class="chart" viewBox="0 0 720 380" role="img" aria-label="Scatter plot: test accuracy against execution time on a log scale for seven classifiers. KNN sits at 89.7 percent accuracy and 0.008 seconds; the deep network reaches a comparable 89.4 percent but takes 29 seconds.">
+      <line class="grid" x1="50" y1="313.5" x2="692" y2="313.5"/>
+      <text class="tick" x="41" y="317.5" text-anchor="end">76</text>
+      <line class="grid" x1="50" y1="239.6" x2="692" y2="239.6"/>
+      <text class="tick" x="41" y="243.6" text-anchor="end">80</text>
+      <line class="grid" x1="50" y1="165.8" x2="692" y2="165.8"/>
+      <text class="tick" x="41" y="169.8" text-anchor="end">84</text>
+      <line class="grid" x1="50" y1="91.9" x2="692" y2="91.9"/>
+      <text class="tick" x="41" y="95.9" text-anchor="end">88</text>
+      <line class="grid" x1="50" y1="18.0" x2="692" y2="18.0"/>
+      <text class="tick" x="41" y="22.0" text-anchor="end">92</text>
+      <line class="axis" x1="50" y1="332.0" x2="692" y2="332.0"/>
+      <line class="grid" x1="97.6" y1="18" x2="97.6" y2="332.0"/>
+      <text class="tick" x="97.6" y="352" text-anchor="middle">10 ms</text>
+      <line class="grid" x1="256.1" y1="18" x2="256.1" y2="332.0"/>
+      <text class="tick" x="256.1" y="352" text-anchor="middle">100 ms</text>
+      <line class="grid" x1="414.6" y1="18" x2="414.6" y2="332.0"/>
+      <text class="tick" x="414.6" y="352" text-anchor="middle">1 s</text>
+      <line class="grid" x1="573.1" y1="18" x2="573.1" y2="332.0"/>
+      <text class="tick" x="573.1" y="352" text-anchor="middle">10 s</text>
+      <text class="axlabel" x="371.0" y="372" text-anchor="middle">execution time (log scale)</text>
+      <text class="axlabel" x="41" y="15" text-anchor="end">test accuracy %</text>
+      <g class="pt"><circle class="mark" cx="82.2" cy="60.5" r="7" fill="var(--viz-s1)"><title>KNN — 89.7 % accuracy in 0.008 s</title></circle></g>
+      <text class="dlabel dlabel--s1" x="92.2" y="64.5" text-anchor="start">KNN</text>
+      <g class="pt"><circle class="mark" cx="208.4" cy="291.4" r="5" fill="var(--viz-context)"><title>DT — 77.2 % accuracy in 0.05 s</title></circle></g>
+      <text class="dlabel" x="218.4" y="295.4" text-anchor="start">DT</text>
+      <g class="pt"><circle class="mark" cx="319.2" cy="99.3" r="5" fill="var(--viz-context)"><title>SVM — 87.6 % accuracy in 0.25 s</title></circle></g>
+      <text class="dlabel" x="329.2" y="103.3" text-anchor="start">SVM</text>
+      <g class="pt"><circle class="mark" cx="419.9" cy="149.1" r="5" fill="var(--viz-context)"><title>RF — 84.9 % accuracy in 1.08 s</title></circle></g>
+      <text class="dlabel" x="409.9" y="141.1" text-anchor="end">RF</text>
+      <g class="pt"><circle class="mark" cx="422.4" cy="149.1" r="5" fill="var(--viz-context)"><title>RF + AdaBoost — 84.9 % accuracy in 1.12 s</title></circle></g>
+      <text class="dlabel" x="432.4" y="163.1" text-anchor="start">RF + AdaBoost</text>
+      <g class="pt"><circle class="mark" cx="455.1" cy="132.5" r="5" fill="var(--viz-context)"><title>DT + AdaBoost — 85.8 % accuracy in 1.8 s</title></circle></g>
+      <text class="dlabel" x="465.1" y="126.5" text-anchor="start">DT + AdaBoost</text>
+      <g class="pt"><circle class="mark" cx="646.4" cy="66.0" r="5" fill="var(--viz-context)"><title>DNN — 89.4 % accuracy in 29.0 s</title></circle></g>
+      <text class="dlabel" x="636.4" y="70.0" text-anchor="end">DNN</text>
+    </svg>
+    </div>
+    <figcaption>Test accuracy against execution time, log scale. <b>KNN</b> is highlighted; the other
+    six classifiers are context. Up and to the left is better. Reported in the manuscript, Table VI.</figcaption>
+  </figure>
+
+  <div class="tablewrap reveal">
+    <table class="datatable">
+      <caption>Performance of every evaluated classifier (manuscript, Table VI)</caption>
+      <thead><tr><th>Model</th><th class="num">Train %</th><th class="num">Val %</th><th class="num">Test %</th><th class="num">ROC %</th><th class="num">Time (s)</th></tr></thead>
+      <tbody>
+      <tr class="is-key"><td>KNN (k = 3)</td><td class="num">93.62</td><td class="num">88.54</td><td class="num">89.7</td><td class="num">90</td><td class="num">0.008</td></tr>
+      <tr><td>DNN</td><td class="num">96.38</td><td class="num">88.85</td><td class="num">89.4</td><td class="num">89</td><td class="num">29</td></tr>
+      <tr><td>SVM (RBF)</td><td class="num">99.52</td><td class="num">87.90</td><td class="num">87.6</td><td class="num">88</td><td class="num">0.25</td></tr>
+      <tr><td>DT + AdaBoost</td><td class="num">100</td><td class="num">86.62</td><td class="num">85.8</td><td class="num">86</td><td class="num">1.8</td></tr>
+      <tr><td>RF</td><td class="num">100</td><td class="num">85.67</td><td class="num">84.9</td><td class="num">85</td><td class="num">1.08</td></tr>
+      <tr><td>RF + AdaBoost</td><td class="num">100</td><td class="num">86.62</td><td class="num">84.9</td><td class="num">85</td><td class="num">1.12</td></tr>
+      <tr><td>Decision tree</td><td class="num">94.43</td><td class="num">79.62</td><td class="num">77.2</td><td class="num">78</td><td class="num">0.05</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>For fall risk specifically, recall on the faller class is the metric that matters — a missed faller
+  is the costly error. SVM, KNN and the deep network all reach roughly <strong>91 % F1 on the fall
+  class</strong>. The Gonzalez segmentation algorithm gave the best balance of discrimination and
+  simplicity.</p>
+
+  <h2>My contribution</h2>
+  <p>Stated separately from bibliographic authorship: I am the <strong>second author</strong> of
+  W. Dib, A. Boudia, F. Boukhedimi, O. Kerdjidj.</p>
+  <ul>
+    <li>Implementation and comparative evaluation of the four gait-cycle segmentation algorithms on the
+    LTMM signals.</li>
+    <li>Signal pre-processing from a single inertial measurement unit — detrending, filtering, gravity
+    removal.</li>
+    <li>Per-cycle feature extraction: statistical, frequency-domain and spatio-temporal gait
+    parameters.</li>
+    <li>The classifier benchmark: dimensionality reduction, hyperparameter search, and the
+    accuracy/latency evaluation.</li>
+  </ul>
+
+  <h3>Earlier related work (2022)</h3>
+  <p>In a preceding internship at the same lab I built a <strong>1D CNN</strong> for human-activity
+  recognition and fall detection, converted it to <strong>TensorFlow Lite</strong> and deployed it on an
+  <strong>Arduino Nano 33 BLE</strong> with onboard inertial sensors — the embedded counterpart to the
+  question this study answers offline.</p>
+
+  <h2>Technologies</h2>
+  <p>Python · scikit-learn · NumPy · SciPy · pandas · Matplotlib · TensorFlow / Keras · TensorFlow Lite ·
+  MATLAB (signal prototyping) · C/C++ and Arduino (embedded deployment) · PhysioNet LTMM dataset</p>
+
+  <h2>What I took from it</h2>
+  <ul>
+    <li><strong>The segmentation step sets the ceiling.</strong> Four algorithms on the same signal
+    produce measurably different gait parameters; choosing one is a modeling decision, not preprocessing
+    hygiene.</li>
+    <li><strong>Report the cost next to the score.</strong></li>
+    <li><strong>Class-conditional metrics, not accuracy.</strong> In fall risk, a false negative and a
+    false positive are not the same mistake.</li>
+  </ul>
+
+  <h2>Links</h2>
+  <p><a href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf/blob/main/articles/Fall_Risk_Assessment_Using_Gait_Analysis.pdf">Manuscript (PDF) →</a><br>
+  Dataset: Long Term Movement Monitoring database, PhysioNet — publicly available.<br>
+  Implementation code is not currently published.</p>
+
+    </article>
+    <nav class="pager" aria-label="Other projects">
+      <a href="dbt-data-platform.html"><span class="k">Previous</span>← National Building Data Platform</a>
+      <a href="interseg-wesam.html"><span class="k">Next</span>Interactive Segmentation for Borehole Images →</a>
+    </nav>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="wrap footer__inner">
+    <span>Abderaouf Boudia — AI Engineer &amp; Data Scientist</span>
+    <span>
+      <a href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf">Source</a> ·
+      <a href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf/raw/main/cv/Abderaouf-Boudia-CV.pdf">CV</a> ·
+      <a href="https://www.linkedin.com/in/abderaouf-boudia-4bb166174/">LinkedIn</a>
+    </span>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var btn = document.getElementById('theme-toggle');
+    btn.addEventListener('click', function () {
+      var current = root.dataset.theme ||
+        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      var next = current === 'dark' ? 'light' : 'dark';
+      root.dataset.theme = next;
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var items = document.querySelectorAll('.reveal');
+    if (!('IntersectionObserver' in window)) {
+      items.forEach(function (el) { el.classList.add('is-in'); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-in');
+        io.unobserve(entry.target);
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+    items.forEach(function (el) { io.observe(el); });
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Enhanced Foundation-Model Interactive Segmentation for Borehole Image Data — Abderaouf Boudia</title>
+<meta name="description" content="Weakly-supervised source-free adaptation of SAM for corrosion detection in ultrasonic borehole imagery: error-driven click simulation and dense prompt encoding, for a reported gain of over 13 IoU points.">
+<meta name="author" content="Abderaouf Boudia">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Enhanced Foundation-Model Interactive Segmentation for Borehole Image Data — Abderaouf Boudia">
+<meta property="og:description" content="Weakly-supervised source-free adaptation of SAM for corrosion detection in ultrasonic borehole imagery: error-driven click simulation and dense prompt encoding, for a reported gain of over 13 IoU points.">
+<link rel="canonical" href="https://boudia-abderaouf.github.io/BOUDIA-Abderaouf/projects/interseg-wesam.html">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230b6e68'/><text y='.9em' x='50%25' text-anchor='middle' font-size='62' font-family='ui-monospace,monospace' fill='%23fff'>A</text></svg>">
+<link rel="stylesheet" href="../styles.css">
+<script>
+  // Applied before first paint so the chosen theme never flashes.
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t;
+  } catch (e) {}
+</script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav__inner">
+    <a class="nav__mark" href="../index.html">abderaouf&nbsp;boudia</a>
+    <nav class="nav__links" aria-label="Sections">
+      <a href="../index.html#work" aria-current="page">Work</a>
+      <a href="../research.html">Research</a>
+      <a href="../index.html#experience">Experience</a>
+      <a href="../index.html#skills">Skills</a>
+      <a href="../index.html#about">About</a>
+      <a class="nav__cta" href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf/raw/main/cv/Abderaouf-Boudia-CV.pdf">CV</a>
+      <button class="theme-toggle" type="button" id="theme-toggle" aria-label="Switch colour theme">
+        <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap crumb"><a href="../index.html">Home</a> <span aria-hidden="true">/</span>
+    <a href="../index.html#work">Work</a> <span aria-hidden="true">/</span> Interactive Segmentation for Borehole Images</div>
+
+  <div class="wrap page-head">
+    <h1>Enhanced Foundation-Model Interactive Segmentation for Borehole Image Data</h1>
+    <p class="lede">Adapting a segmentation foundation model to ultrasonic borehole imagery, where the pipe's own manufacturing patterns look exactly like the defects you are hunting. <span class="status ">Published · IGARSS 2025</span></p>
+  </div>
+
+  <div class="wrap">
+  <dl class="meta reveal">
+    <div><dt>Context</dt><dd>SLB</dd></div>
+    <div><dt>Period</dt><dd>2024</dd></div>
+    <div><dt>Role</dt><dd>Adaptation codebase &amp; experiments</dd></div>
+    <div><dt>Authorship</dt><dd>Third author</dd></div>
+    <div><dt>Venue</dt><dd>IEEE IGARSS 2025</dd></div>
+    <div><dt>Status</dt><dd>Published</dd></div>
+  </dl>
+    <article class="prose-long">
+
+  <p class="lead-in">Replacing random point sampling with error-driven clicks changed the results more
+  than any loss-weight tuning did. How you simulate the human is part of the method.</p>
+
+  <h2>Problem</h2>
+  <p>Assessing well integrity means detecting corrosion in ultrasonic borehole images. The imaging tools
+  measure pipe radius and thickness; corrosion appears as metal loss on the inner or outer wall. The
+  difficulty is that pipes are moulded, so they carry homogeneous manufacturing patterns and collars
+  that look, to a segmentation model, exactly like the defects it is supposed to find.</p>
+  <p>Labelling this data is therefore slow, expensive and requires a domain expert — which is precisely
+  why there is not enough of it to train a supervised model. Interactive segmentation breaks the loop:
+  an expert supplies a few clicks and the model does the rest, so annotation gets cheap enough to
+  bootstrap the dataset.</p>
+  <p>The obstacle: <strong>SAM performs poorly on this domain</strong>, and WeSAM — the
+  state-of-the-art weakly-supervised adaptation of SAM — improved it only marginally.</p>
+
+  <h2>Background</h2>
+  <p>Two research threads meet here. <strong>Interactive segmentation</strong> guides a model with
+  sparse human input — clicks, boxes, text — rather than dense masks. <strong>Source-free domain
+  adaptation</strong> adapts a pre-trained model to a target domain without access to the source data,
+  which is often restricted for privacy, storage or confidentiality reasons. WeSAM applies this to SAM
+  with a self-training architecture.</p>
+
+  <h2>Architecture</h2>
+
+  <figure class="figure reveal">
+    <div class="figure__frame">
+      <div class="branches">
+        <div class="is-frozen"><h4>Anchor (frozen)</h4><p>Retains source-domain knowledge and
+        regularises the student away from drift.</p></div>
+        <div><h4>Student</h4><p>Updated on strongly augmented views; carries the gradient.</p></div>
+        <div><h4>Teacher</h4><p>Weight-shared with the student, fed weakly augmented views; produces the
+        pseudo-labels.</p></div>
+      </div>
+    <ol class="flow">
+      <li class="flow__step flow__step--key"><span class="n">1</span><h4>Click simulation — contribution 1</h4><p>The first click seeds the mask; every subsequent click is placed at the centroid of the largest error region between the current prediction and the ground truth. Ten clicks are selected this way, so training sees the corrections a real annotator would make — rather than the 5 random positive and 5 random negative points WeSAM samples.</p></li>
+      <li class="flow__step flow__step--key"><span class="n">2</span><h4>Dense prompt encoding — contribution 2</h4><p>Visual prompts become a 3-channel dense map: positive clicks in the first channel, negative clicks in the second, the <em>previous mask</em> in the third. Encoding the previous mask lets each interaction refine the last instead of starting over.</p></li>
+      <li class="flow__step"><span class="n">3</span><h4>Fusion &amp; decoding</h4><p>The dense prompt map is fused with the image feature maps, passed through self- and cross-attention, then the mask decoder.</p></li>
+      <li class="flow__step"><span class="n">4</span><h4>Adaptation objective</h4><p>Focal, Dice and IoU losses on the prediction, plus anchor-loss regularisation and a contrastive term. LoRA is applied to the SAM backbone, so adaptation touches a small number of parameters.</p></li>
+    </ol>
+    </div>
+    <figcaption>The two contributions sit at the <b>prompt</b> end of the architecture, not the loss
+    end — which is where the gain turned out to be.</figcaption>
+  </figure>
+
+  <h3>A third, smaller change: augmentation against a shortcut</h3>
+  <p>A model trained on this data learns to rely on high contrast between groove and background. A
+  custom contrast shift was added to the strong-augmentation set specifically to create overlap between
+  the two, removing the shortcut. Augmentation here removes a bias rather than just adding variance —
+  and the ablation shows it contributes at every click budget.</p>
+
+  <h2>Dataset</h2>
+  <p><strong>THBK</strong> (Azimuthal Variation of Pipe Thickness) — 180 grayscale ultrasonic images
+  with binary masks, targeting axial long defects (“grooves”). Acquisition corrupts some samples, so
+  cleaning and pre-processing precede training. Augmentations split into weak (vertical and horizontal
+  flips) and strong (posterisation, sharpening, random brightness and contrast, plus the customised
+  contrast shift).</p>
+
+  <h2>Results</h2>
+  <p>IoU as a function of the number of user clicks. The first contribution alone improves on WeSAM; the
+  combined approach surpasses SegNext at <em>every</em> click count. The abstract reports a gain of
+  <strong>over 13 IoU points</strong>.</p>
+
+  <figure class="figure reveal">
+    <div class="figure__frame">
+    <div class="chart-legend"><span><i style="background:var(--viz-s1)"></i>Ours 2 — both contributions</span><span><i style="background:var(--viz-s2)"></i>Ours 1 — clicking procedure</span><span><i style="background:var(--viz-context)"></i>baselines (SAM, WeSAM, SegNext)</span></div>
+    <svg class="chart" viewBox="0 0 720 390" role="img" aria-label="Line chart: IoU against number of user clicks for five methods. Ours 2 leads at every click budget, reaching 83.95 percent at 20 clicks.">
+      <line class="grid" x1="46" y1="344.0" x2="616" y2="344.0"/>
+      <text class="tick" x="37" y="348.0" text-anchor="end">0</text>
+      <line class="grid" x1="46" y1="289.0" x2="616" y2="289.0"/>
+      <text class="tick" x="37" y="293.0" text-anchor="end">15</text>
+      <line class="grid" x1="46" y1="234.0" x2="616" y2="234.0"/>
+      <text class="tick" x="37" y="238.0" text-anchor="end">30</text>
+      <line class="grid" x1="46" y1="179.0" x2="616" y2="179.0"/>
+      <text class="tick" x="37" y="183.0" text-anchor="end">45</text>
+      <line class="grid" x1="46" y1="124.0" x2="616" y2="124.0"/>
+      <text class="tick" x="37" y="128.0" text-anchor="end">60</text>
+      <line class="grid" x1="46" y1="69.0" x2="616" y2="69.0"/>
+      <text class="tick" x="37" y="73.0" text-anchor="end">75</text>
+      <line class="grid" x1="46" y1="14.0" x2="616" y2="14.0"/>
+      <text class="tick" x="37" y="18.0" text-anchor="end">90</text>
+      <line class="axis" x1="46" y1="344.0" x2="616" y2="344.0"/>
+      <text class="tick" x="46.0" y="364" text-anchor="middle">1</text>
+      <text class="tick" x="316.0" y="364" text-anchor="middle">10</text>
+      <text class="tick" x="616.0" y="364" text-anchor="middle">20</text>
+      <text class="axlabel" x="331.0" y="382" text-anchor="middle">user clicks</text>
+      <text class="axlabel" x="37" y="12" text-anchor="end">IoU %</text>
+      <path class="series-line" d="M46.0 325.6 L316.0 183.4 L616.0 161.8" stroke="var(--viz-context)" stroke-width="2" opacity="0.85"/>
+      <g class="pt"><circle class="mark" cx="46.0" cy="325.6" r="3.5" fill="var(--viz-context)"><title>SAM — 1 click: 5.02 % IoU</title></circle></g>
+      <g class="pt"><circle class="mark" cx="316.0" cy="183.4" r="3.5" fill="var(--viz-context)"><title>SAM — 10 clicks: 43.81 % IoU</title></circle></g>
+      <g class="pt"><circle class="mark" cx="616.0" cy="161.8" r="3.5" fill="var(--viz-context)"><title>SAM — 20 clicks: 49.68 % IoU</title></circle></g>
+      <text class="dlabel" x="627.0" y="179.8" fill="var(--muted)">SAM <tspan opacity="0.65">49.68</tspan></text>
+      <path class="series-line" d="M46.0 334.3 L316.0 154.9 L616.0 152.8" stroke="var(--viz-context)" stroke-width="2" opacity="0.85"/>
+      <g class="pt"><circle class="mark" cx="46.0" cy="334.3" r="3.5" fill="var(--viz-context)"><title>WeSAM — 1 click: 2.64 % IoU</title></circle></g>
+      <g class="pt"><circle class="mark" cx="316.0" cy="154.9" r="3.5" fill="var(--viz-context)"><title>WeSAM — 10 clicks: 51.57 % IoU</title></circle></g>
+      <g class="pt"><circle class="mark" cx="616.0" cy="152.8" r="3.5" fill="var(--viz-context)"><title>WeSAM — 20 clicks: 52.15 % IoU</title></circle></g>
+      <text class="dlabel" x="627.0" y="154.8" fill="var(--muted)">WeSAM <tspan opacity="0.65">52.15</tspan></text>
+      <path class="series-line" d="M46.0 334.8 L316.0 143.5 L616.0 135.8" stroke="var(--viz-s2)" stroke-width="2.5"/>
+      <g class="pt"><circle class="mark" cx="46.0" cy="334.8" r="4.5" fill="var(--viz-s2)"><title>Ours 1 — 1 click: 2.51 % IoU</title></circle></g>
+      <g class="pt"><circle class="mark" cx="316.0" cy="143.5" r="4.5" fill="var(--viz-s2)"><title>Ours 1 — 10 clicks: 54.67 % IoU</title></circle></g>
+      <g class="pt"><circle class="mark" cx="616.0" cy="135.8" r="4.5" fill="var(--viz-s2)"><title>Ours 1 — 20 clicks: 56.79 % IoU</title></circle></g>
+      <text class="dlabel dlabel--s1" x="627.0" y="136.8" fill="var(--viz-s2)">Ours 1 <tspan opacity="0.65">56.79</tspan></text>
+      <path class="series-line" d="M46.0 312.7 L316.0 152.2 L616.0 73.3" stroke="var(--viz-context)" stroke-width="2" opacity="0.85"/>
+      <g class="pt"><circle class="mark" cx="46.0" cy="312.7" r="3.5" fill="var(--viz-context)"><title>SegNext — 1 click: 8.55 % IoU</title></circle></g>
+      <g class="pt"><circle class="mark" cx="316.0" cy="152.2" r="3.5" fill="var(--viz-context)"><title>SegNext — 10 clicks: 52.32 % IoU</title></circle></g>
+      <g class="pt"><circle class="mark" cx="616.0" cy="73.3" r="3.5" fill="var(--viz-context)"><title>SegNext — 20 clicks: 73.83 % IoU</title></circle></g>
+      <text class="dlabel" x="627.0" y="77.3" fill="var(--muted)">SegNext <tspan opacity="0.65">73.83</tspan></text>
+      <path class="series-line" d="M46.0 292.2 L316.0 104.4 L616.0 36.2" stroke="var(--viz-s1)" stroke-width="2.5"/>
+      <g class="pt"><circle class="mark" cx="46.0" cy="292.2" r="4.5" fill="var(--viz-s1)"><title>Ours 2 — 1 click: 14.14 % IoU</title></circle></g>
+      <g class="pt"><circle class="mark" cx="316.0" cy="104.4" r="4.5" fill="var(--viz-s1)"><title>Ours 2 — 10 clicks: 65.34 % IoU</title></circle></g>
+      <g class="pt"><circle class="mark" cx="616.0" cy="36.2" r="4.5" fill="var(--viz-s1)"><title>Ours 2 — 20 clicks: 83.95 % IoU</title></circle></g>
+      <text class="dlabel dlabel--s1" x="627.0" y="40.2" fill="var(--viz-s1)">Ours 2 <tspan opacity="0.65">83.95</tspan></text>
+    </svg>
+    </div>
+    <figcaption>IoU against click budget for all five methods, as reported in the paper (Table I). The
+    two contributions of this work are coloured; the three baselines are context. Note the first column:
+    at a single click the combined approach already leads, which is what matters to an annotator.</figcaption>
+  </figure>
+
+  <div class="tablewrap reveal">
+    <table class="datatable">
+      <caption>IoU (%) by click budget (paper, Table I)</caption>
+      <thead><tr><th>Method</th><th class="num">1 click</th><th class="num">10 clicks</th><th class="num">20 clicks</th></tr></thead>
+      <tbody>
+      <tr><td>SAM</td><td class="num">5.02</td><td class="num">43.81</td><td class="num">49.68</td></tr>
+      <tr><td>WeSAM</td><td class="num">2.64</td><td class="num">51.57</td><td class="num">52.15</td></tr>
+      <tr><td>Ours 1</td><td class="num">2.51</td><td class="num">54.67</td><td class="num">56.79</td></tr>
+      <tr><td>SegNext</td><td class="num">8.55</td><td class="num">52.32</td><td class="num">73.83</td></tr>
+      <tr class="is-key"><td>Ours 2</td><td class="num">14.14</td><td class="num">65.34</td><td class="num">83.95</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>Ablation on the customised contrast shift confirms a consistent improvement at every budget —
+  65.34 against 60.03 at ten clicks, 83.95 against 81.00 at twenty. Qualitatively, the approach reduces
+  false positives more effectively than SegNext, which is what matters when the background is a
+  manufacturing pattern that mimics the defect.</p>
+
+  <h2>My technical contribution</h2>
+  <p>Stated separately from bibliographic authorship. The author list is Imane Baho*, Eya Ghamgui*,
+  <strong>Abderaouf Boudia</strong>, Franco Marchesoni, Josselin Kherroubi — I am
+  <strong>third author</strong>; the first two are marked in the paper as having contributed
+  equally.</p>
+  <p>I implemented the adaptation codebase used to produce the reported experiments:</p>
+  <ul>
+    <li>The <strong>iterative click simulator</strong> — click state, computation of the largest error
+    region between prediction and ground truth, and placement of the next click at its centroid (the
+    paper's first contribution).</li>
+    <li>The <strong>two adaptation procedures</strong>: the error-driven iterative clicking procedure,
+    and the random positive/negative point baseline it is compared against.</li>
+    <li>The <strong>self-training loop</strong> — anchor, student and teacher forward passes over weak
+    and strong augmentations, with focal, Dice, IoU, anchor-regularisation and contrastive losses, and
+    LoRA fine-tuning of the SAM backbone.</li>
+    <li><strong>Dataset adapters</strong> for the evaluation corpora, and the <strong>inference,
+    evaluation and plotting tooling</strong> that produced the click-budget curves and qualitative
+    comparisons.</li>
+  </ul>
+  <p>The work builds on the publicly released WeSAM codebase (Zhang et al., CVPR 2024); the
+  contributions above are implemented on top of it.</p>
+
+  <h2>Technologies</h2>
+  <p>Python · PyTorch · PyTorch Lightning · Segment Anything Model · LoRA · SegNext-style dense prompt
+  encoding · RITM-style click simulation · segmentation-models-pytorch · Albumentations · OpenCV ·
+  pycocotools · TensorBoard</p>
+
+  <h2>What I took from it</h2>
+  <ul>
+    <li><strong>How you simulate the human is part of the method.</strong></li>
+    <li><strong>Prompt representation is architecture.</strong> Moving from sparse to dense encoding,
+    and feeding the previous mask back in, is where the large gain came from.</li>
+    <li><strong>Augmentation can remove a shortcut,</strong> not just add variance.</li>
+  </ul>
+
+  <h2>Links</h2>
+  <p><a href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf/blob/main/articles/Paper_IGARSS_InterSEG.pdf">Paper (PDF) →</a><br>
+  Base method: Zhang, Su, Xu &amp; Jia, <em>Improving the Generalization of Segmentation Foundation
+  Model under Distribution Shift via Weakly Supervised Adaptation</em>, CVPR 2024.<br>
+  Implementation code is company-internal and is not published.</p>
+
+    </article>
+    <nav class="pager" aria-label="Other projects">
+      <a href="fall-risk-assessment.html"><span class="k">Previous</span>← Fall Risk Assessment</a>
+      
+    </nav>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="wrap footer__inner">
+    <span>Abderaouf Boudia — AI Engineer &amp; Data Scientist</span>
+    <span>
+      <a href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf">Source</a> ·
+      <a href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf/raw/main/cv/Abderaouf-Boudia-CV.pdf">CV</a> ·
+      <a href="https://www.linkedin.com/in/abderaouf-boudia-4bb166174/">LinkedIn</a>
+    </span>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var btn = document.getElementById('theme-toggle');
+    btn.addEventListener('click', function () {
+      var current = root.dataset.theme ||
+        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      var next = current === 'dark' ? 'light' : 'dark';
+      root.dataset.theme = next;
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var items = document.querySelectorAll('.reveal');
+    if (!('IntersectionObserver' in window)) {
+      items.forEach(function (el) { el.classList.add('is-in'); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-in');
+        io.unobserve(entry.target);
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+    items.forEach(function (el) { io.observe(el); });
+  })();
+</script>
+
+</body>
+</html>

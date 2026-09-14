@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deep Learning for Hourly Building Energy Forecasting — Abderaouf Boudia</title>
+<meta name="description" content="Hourly heating and cooling load prediction for buildings with PyTorch: building-level stratified splits, sampled 168-hour windows, Huber loss, and LSTM and gradient-boosting baselines.">
+<meta name="author" content="Abderaouf Boudia">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Deep Learning for Hourly Building Energy Forecasting — Abderaouf Boudia">
+<meta property="og:description" content="Hourly heating and cooling load prediction for buildings with PyTorch: building-level stratified splits, sampled 168-hour windows, Huber loss, and LSTM and gradient-boosting baselines.">
+<link rel="canonical" href="https://boudia-abderaouf.github.io/BOUDIA-Abderaouf/projects/hourly-energy-forecasting.html">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230b6e68'/><text y='.9em' x='50%25' text-anchor='middle' font-size='62' font-family='ui-monospace,monospace' fill='%23fff'>A</text></svg>">
+<link rel="stylesheet" href="../styles.css">
+<script>
+  // Applied before first paint so the chosen theme never flashes.
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t;
+  } catch (e) {}
+</script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav__inner">
+    <a class="nav__mark" href="../index.html">abderaouf&nbsp;boudia</a>
+    <nav class="nav__links" aria-label="Sections">
+      <a href="../index.html#work" aria-current="page">Work</a>
+      <a href="../research.html">Research</a>
+      <a href="../index.html#experience">Experience</a>
+      <a href="../index.html#skills">Skills</a>
+      <a href="../index.html#about">About</a>
+      <a class="nav__cta" href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf/raw/main/cv/Abderaouf-Boudia-CV.pdf">CV</a>
+      <button class="theme-toggle" type="button" id="theme-toggle" aria-label="Switch colour theme">
+        <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap crumb"><a href="../index.html">Home</a> <span aria-hidden="true">/</span>
+    <a href="../index.html#work">Work</a> <span aria-hidden="true">/</span> Hourly Energy Forecasting</div>
+
+  <div class="wrap page-head">
+    <h1>Deep Learning for Hourly Building Energy Forecasting</h1>
+    <p class="lede">Predicting a building's heating and cooling load hour by hour, from its characteristics, its operating scenario and a weather year. <span class="status ">Ongoing research</span></p>
+  </div>
+
+  <div class="wrap">
+  <dl class="meta reveal">
+    <div><dt>Context</dt><dd>Cedrus Solutions</dd></div>
+    <div><dt>Role</dt><dd>Pipeline, models, evaluation</dd></div>
+    <div><dt>Domain</dt><dd>Deep learning · time series</dd></div>
+    <div><dt>Framework</dt><dd>PyTorch</dd></div>
+    <div><dt>Targets</dt><dd>Heating &amp; cooling</dd></div>
+    <div><dt>Status</dt><dd>Ongoing · manuscript planned</dd></div>
+  </dl>
+    <article class="prose-long">
+
+  <p class="lead-in">A model can be right by the hour and wrong by the season. Reporting only one of
+  those hides the failure the other would catch.</p>
+
+  <div class="callout reveal"><p>This page describes the engineering approach at a high level. Source
+  code, customer data and proprietary implementation details remain private.</p>
+  <p><strong>No performance figures are published.</strong> The work is ongoing and a manuscript is
+  planned; nothing here has been submitted or peer-reviewed.</p></div>
+
+  <h2>Problem</h2>
+  <p>An annual energy figure is enough to rank buildings; it is not enough to reason about them. Peak
+  load, seasonal behaviour, the effect of an occupancy or setpoint change, the value of a retrofit at
+  the hour it actually bites — all of that lives in the <strong>hourly</strong> profile.</p>
+
+  <h2>Why this is harder than the annual problem</h2>
+  <ul>
+    <li><strong>Volume.</strong> One building-year is thousands of hourly rows; a training corpus is
+    hundreds of millions. Holding a dataset in memory naively is not an option.</li>
+    <li><strong>Conditioning.</strong> Hourly demand depends on time-varying inputs — weather,
+    occupancy, internal gains, heating and cooling setpoint schedules — not only on static building
+    characteristics.</li>
+    <li><strong>Two regimes, not one.</strong> Heating and cooling are different physical problems with
+    different drivers and different seasons. Treating them as one target buries both.</li>
+  </ul>
+
+  <h2>Architecture</h2>
+
+  <figure class="figure reveal">
+    <div class="figure__frame">
+    <div class="flow__fan">
+      <div><b>Static sampling</b> — building characteristics drawn from declared distributions</div>
+      <div><b>Scenario banks</b> — occupancy, internal gains, heating and cooling setpoint schedules, generated once and then frozen</div>
+      <div><b>Weather draws</b> — weather years drawn from a stable source set and extracted alongside the outputs</div>
+    </div>
+    <ol class="flow">
+      <li class="flow__step"><span class="n">1</span><h4>Hourly simulation</h4><p>Each organised building-scenario-weather combination is simulated at hourly resolution.</p></li>
+      <li class="flow__step"><span class="n">2</span><h4>Corpus assembly</h4><p>Hourly outputs, scenario inputs and extracted weather are combined into a chunked, compressed Parquet corpus. Per-source time shifts align lagged conditions with the hour being predicted; rows with insufficient valid coverage are dropped.</p></li>
+      <li class="flow__step"><span class="n">3</span><h4>Season blocking</h4><p>The calendar year is cut into explicit heating and cooling windows. Each target trains only on its own regime — heating on the winter blocks, cooling on a configurable summer window.</p></li>
+      <li class="flow__step flow__step--key"><span class="n">4</span><h4>Training</h4><p>Two models, one per target. Splits are stratified <em>at the building level</em>; training samples 168-hour windows at random offsets inside a season block.</p></li>
+      <li class="flow__step"><span class="n">5</span><h4>Evaluation &amp; reporting</h4><p>Pointwise regression metrics, per-building metrics over the reconstructed window, temporal overlays, and an explicit energy-conservation factor.</p></li>
+    </ol>
+    </div>
+    <figcaption>Fixed inputs live in a separate tree from regenerated outputs, and the pipeline <b>fails loudly</b> if a fixed input is missing rather than silently regenerating it — otherwise a corpus quietly stops being comparable to the models trained on it.</figcaption>
+  </figure>
+
+  <h2>Engineering decisions</h2>
+
+  <h3>Split by building, stratified — never by row</h3>
+  <p>Train, validation and test are split at the <strong>building</strong> level and stratified, by
+  surface and by scenario. A random row split leaks the same building across splits and produces a
+  meaningless score. Getting this right changed the measured difficulty of the problem more than any
+  architecture change did.</p>
+
+  <h3>Sample windows, not whole years</h3>
+  <p>Training draws 168-hour (one-week) subsets at random offsets inside a season block. This keeps
+  batches diverse, bounds memory, and acts as augmentation over the phase of the week.</p>
+
+  <h3>Huber loss over MSE</h3>
+  <p>Hourly power has heavy tails; squared error lets a handful of extreme hours dictate the fit.</p>
+
+  <h3>Models compared</h3>
+  <p>The production path is a configurable PyTorch MLP — arbitrary hidden stack, ReLU / GELU / SiLU,
+  optional batch-norm or layer-norm, optional dropout. <strong>LSTM</strong> and
+  <strong>XGBoost</strong> variants were implemented and evaluated against it; the sequence model
+  consumes <code>(batch, time, features)</code> windows and regresses from the final hidden state. The
+  simpler conditioned regressor was retained for the current workflow; the sequence models remain the
+  natural comparison for the planned write-up.</p>
+
+  <h3>Runs that survive a crash</h3>
+  <p>Mixed precision with a gradient scaler, batch sizes in the thousands, periodic checkpoints carrying
+  optimiser and best state, and resume-by-run-name. A multi-hour run that dies at epoch 30 does not
+  start over. Plateau-based learning-rate reduction, early stopping and best-state restore, with
+  TensorBoard logging per run.</p>
+
+  <h3>Evaluation on two levels</h3>
+  <p>Pointwise regression metrics (RMSE, MAE, R²) <em>and</em> per-building metrics over the
+  reconstructed window. An explicit energy-conservation scaling factor is computed and reported, so
+  systematic over- or under-prediction of the seasonal total is visible as its own quantity rather than
+  hidden inside an average.</p>
+
+  <h3>Caching keyed by data fingerprint</h3>
+  <p>Scaling statistics are cached against a key built from the corpus contents and the active filters,
+  so a re-run reuses them only when it is genuinely the same corpus.</p>
+
+  <h2>Beyond training</h2>
+  <p>The same codebase carries single-building inference, auxiliary-consumption modelling and report
+  generation — the path from a trained model to something an engineer actually reads.</p>
+
+  <h2>Technologies</h2>
+  <p>Python · PyTorch · scikit-learn · XGBoost · NumPy · pandas · PyArrow / Parquet · TensorBoard ·
+  YAML-driven configuration · Matplotlib · seaborn · ruff</p>
+
+  <h2>What I took from it</h2>
+  <ul>
+    <li><strong>The split is the experiment.</strong></li>
+    <li><strong>Two metrics, two audiences.</strong> Hourly error is for the model; seasonal-total error
+    is for the engineer who has to trust it.</li>
+    <li><strong>Freeze your fixed inputs, loudly.</strong> The most expensive bug here is the one where
+    regenerated “fixed” data silently invalidates every earlier comparison.</li>
+  </ul>
+
+  <h2>Links</h2>
+  <p>Private — company codebase. Manuscript planned.
+  <a href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf/blob/main/projects/hourly-energy-forecasting.md">Case study on GitHub →</a></p>
+
+    </article>
+    <nav class="pager" aria-label="Other projects">
+      <a href="annual-energy-model.html"><span class="k">Previous</span>← Annual Energy Model</a>
+      <a href="dbt-data-platform.html"><span class="k">Next</span>National Building Data Platform →</a>
+    </nav>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="wrap footer__inner">
+    <span>Abderaouf Boudia — AI Engineer &amp; Data Scientist</span>
+    <span>
+      <a href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf">Source</a> ·
+      <a href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf/raw/main/cv/Abderaouf-Boudia-CV.pdf">CV</a> ·
+      <a href="https://www.linkedin.com/in/abderaouf-boudia-4bb166174/">LinkedIn</a>
+    </span>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var btn = document.getElementById('theme-toggle');
+    btn.addEventListener('click', function () {
+      var current = root.dataset.theme ||
+        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      var next = current === 'dark' ? 'light' : 'dark';
+      root.dataset.theme = next;
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var items = document.querySelectorAll('.reveal');
+    if (!('IntersectionObserver' in window)) {
+      items.forEach(function (el) { el.classList.add('is-in'); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-in');
+        io.unobserve(entry.target);
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+    items.forEach(function (el) { io.observe(el); });
+  })();
+</script>
+
+</body>
+</html>
