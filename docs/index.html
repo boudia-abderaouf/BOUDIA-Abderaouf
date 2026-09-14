@@ -1,0 +1,577 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Abderaouf Boudia — AI Engineer &amp; Data Scientist</title>
+<meta name="description" content="AI Engineer &amp; Data Scientist. LLM systems, RAG and document intelligence, machine learning, deep learning and building energy analytics. Published computer-vision research.">
+<meta name="author" content="Abderaouf Boudia">
+<meta property="og:type" content="profile">
+<meta property="og:title" content="Abderaouf Boudia — AI Engineer &amp; Data Scientist">
+<meta property="og:description" content="LLM systems · Machine Learning · Deep Learning · Energy Analytics">
+<link rel="canonical" href="https://boudia-abderaouf.github.io/BOUDIA-Abderaouf/">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230b6e68'/><text y='.9em' x='50%25' text-anchor='middle' font-size='62' font-family='ui-monospace,monospace' fill='%23fff'>A</text></svg>">
+<link rel="stylesheet" href="styles.css">
+<script>
+  // Applied before first paint so the chosen theme never flashes.
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'dark' || t === 'light') document.documentElement.dataset.theme = t;
+  } catch (e) {}
+</script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav__inner">
+    <a class="nav__mark" href="#top">abderaouf&nbsp;boudia</a>
+    <nav class="nav__links" aria-label="Sections">
+      <a href="#work">Work</a>
+      <a href="#research">Research</a>
+      <a href="#experience">Experience</a>
+      <a href="#skills">Skills</a>
+      <a href="#about">About</a>
+      <a class="nav__cta" href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf/raw/main/cv/Abderaouf-Boudia-CV.pdf">CV</a>
+      <button class="theme-toggle" type="button" id="theme-toggle" aria-label="Switch colour theme">
+        <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ====================== HERO ====================== -->
+<section class="hero">
+  <div class="wrap">
+    <h1>Abderaouf Boudia</h1>
+    <p class="hero__role">AI Engineer &amp; Data Scientist</p>
+    <p class="hero__tags">LLM Systems · Machine Learning · Deep Learning · Energy Analytics</p>
+    <p class="hero__intro">
+      I build AI systems that have to survive measurement — document-reading pipelines where
+      every extracted value carries the sentence that proves it, and learned models that stand
+      in for physics simulations of building energy. I work at <strong>Cedrus Solutions</strong>
+      (March&nbsp;2025 → present), where I designed and built a second-generation retrieval and
+      extraction pipeline that turns technical building audits into a verifiable structured
+      model. Before that, computer-vision and biomedical signal-processing research, with two
+      papers.
+    </p>
+    <div class="actions">
+      <a class="btn btn--primary" href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf/raw/main/cv/Abderaouf-Boudia-CV.pdf">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        Download CV
+      </a>
+      <a class="btn" href="#work">Selected work</a>
+      <a class="btn" href="https://github.com/boudia-abderaouf">GitHub</a>
+      <a class="btn" href="https://www.linkedin.com/in/abderaouf-boudia-4bb166174/">LinkedIn</a>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== FOCUS ====================== -->
+<section id="focus">
+  <div class="wrap reveal">
+    <p class="eyebrow">Current focus</p>
+    <ul class="focus">
+      <li>
+        <h3>Extraction under verification</h3>
+        <p>Hybrid retrieval, closed business vocabularies, deterministic normalisation, and an
+        evidence gate that rejects quotations the corpus does not support.</p>
+      </li>
+      <li>
+        <h3>LLM evaluation</h3>
+        <p>Per-layer failure attribution, so a missing value is charged to the stage that lost
+        it instead of being blamed on the model.</p>
+      </li>
+      <li>
+        <h3>Hourly energy forecasting</h3>
+        <p>Deep learning models that predict a building's heating and cooling load hour by
+        hour. Manuscript planned.</p>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ====================== WORK ====================== -->
+<section id="work">
+  <div class="wrap">
+    <div class="reveal">
+      <p class="eyebrow">Selected work</p>
+      <h2 class="section-title">Six projects, written up as engineering case studies</h2>
+      <p class="section-lede">
+        Problem, decisions, evaluation, and what I personally built. Four describe work inside a
+        company codebase — for those, the write-up covers techniques and reasoning only: no source,
+        no prompts, no customer data.
+      </p>
+    </div>
+
+    <div class="projects">
+
+      <article class="card reveal">
+        <div class="card__head">
+          <h3 class="card__title"><a href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf/blob/main/projects/document-intelligence.md">Verifiable Document Intelligence for Building Energy Audits</a></h3>
+          <span class="status status--live">In production</span>
+        </div>
+        <p>
+          A layered LLM reading pipeline that turns technical audit PDFs into a verifiable building
+          model. Exhaustive page coverage replaces a single top-K search; equipment is inventoried
+          with per-machine identity; retrieval is hybrid — dense, full-text and literal, rank-fused
+          and deepened only where a shallow pass failed.
+        </p>
+        <p>
+          The core idea: <strong>a citation is not evidence — the corpus is</strong>. Every value is
+          checked against the document that supposedly contains it, down to whether the sentence
+          describes the building's current state or a retrofit recommendation. Units are converted in
+          deterministic code, not by the model, and each stored value keeps its source expression and
+          the rule that produced it. Failures are attributed to the layer that caused them.
+        </p>
+        <p>
+          ~11k lines, ~3.4k of them tests, on a path that previously had none. Reads a 33-page audit
+          in about 2 minutes for roughly $0.10.
+        </p>
+        <div class="tags">
+          <span class="tag">RAG</span><span class="tag">hybrid retrieval</span><span class="tag">pgvector</span>
+          <span class="tag">structured extraction</span><span class="tag">Pydantic</span><span class="tag">AWS</span>
+          <span class="tag">pytest</span>
+        </div>
+        <div class="card__links">
+          <a href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf/blob/main/projects/document-intelligence.md">Read the case study →</a>
+        </div>
+      </article>
+
+      <article class="card reveal">
+        <div class="card__head">
+          <h3 class="card__title"><a href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf/blob/main/projects/annual-energy-model.md">Annual Building Energy Consumption Modeling</a></h3>
+          <span class="status status--live">In production</span>
+        </div>
+        <p>
+          A learned stand-in for dynamic thermal simulation. Training data does not exist in the
+          wild, so it is manufactured: Monte-Carlo sampling of a plausible building population,
+          orchestrated physics simulation, result collection, then per-climate-zone neural
+          regressors — milliseconds instead of minutes per building.
+        </p>
+        <p>
+          Dataset and training versions are tracked <strong>separately</strong>, so retraining on an
+          existing corpus and regenerating data for an unchanged trainer are both first-class
+          operations. Releases are snapshotted into a local registry and every release produces an
+          automatic comparison against the previous one — Markdown, CSV, JSON and a PDF of prediction
+          scatters. Evaluation goes past R² to in-margin rates and per-chunk bias, because an
+          aggregate score hides exactly the failure that matters.
+        </p>
+        <div class="tags">
+          <span class="tag">scikit-learn</span><span class="tag">PyTorch</span><span class="tag">Prefect</span>
+          <span class="tag">MLflow</span><span class="tag">Docker</span><span class="tag">pytest</span>
+        </div>
+        <div class="card__links">
+          <a href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf/blob/main/projects/annual-energy-model.md">Read the case study →</a>
+        </div>
+      </article>
+
+      <article class="card reveal">
+        <div class="card__head">
+          <h3 class="card__title"><a href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf/blob/main/projects/hourly-energy-forecasting.md">Deep Learning for Hourly Building Energy Forecasting</a></h3>
+          <span class="status">Ongoing research</span>
+        </div>
+        <p>
+          An annual figure ranks buildings; it does not let you reason about them. Peak load,
+          seasonal behaviour and the hour a retrofit actually bites all live in the hourly profile.
+          This predicts hourly heating and cooling power from building characteristics, operating
+          scenarios and weather.
+        </p>
+        <p>
+          Splits are stratified <strong>at the building level</strong>, never by row — a random row
+          split leaks the same building across splits and produces a meaningless score. Training
+          samples 168-hour windows at random offsets inside a season block, uses Huber loss against
+          heavy-tailed hourly power, and runs in mixed precision with resumable checkpoints. LSTM and
+          gradient-boosting baselines were implemented and evaluated against the production
+          regressor. Results are reported both pointwise and per building, because a model can be
+          right by the hour and wrong by the season.
+        </p>
+        <div class="tags">
+          <span class="tag">PyTorch</span><span class="tag">LSTM</span><span class="tag">XGBoost</span>
+          <span class="tag">Parquet</span><span class="tag">TensorBoard</span><span class="tag">time series</span>
+        </div>
+        <div class="card__links">
+          <a href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf/blob/main/projects/hourly-energy-forecasting.md">Read the case study →</a>
+        </div>
+      </article>
+
+      <article class="card reveal">
+        <div class="card__head">
+          <h3 class="card__title"><a href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf/blob/main/projects/dbt-data-platform.md">National Building Data Platform</a></h3>
+          <span class="status status--live">In production</span>
+        </div>
+        <p>
+          France publishes an authoritative national building database — geometry, addresses,
+          parcels, ownership, energy certificates — and in raw form it is unusable: dozens of
+          interrelated tables at a volume that makes national-scale joins impractical.
+        </p>
+        <p>
+          A dbt project turns it into analysis-ready facts: staging → intermediate → marts, with the
+          <em>département</em> as the unit of build (~95 runs) so every build stays bounded and
+          independently re-runnable. GiST spatial indexes are created in post-hooks — an unindexed
+          geometry column makes the table pointless — source declarations are generated rather than
+          hand-maintained, session timeouts guard every model, and tests assert the grain and the
+          referential contract.
+        </p>
+        <div class="tags">
+          <span class="tag">dbt</span><span class="tag">SQL</span><span class="tag">PostgreSQL</span>
+          <span class="tag">PostGIS</span><span class="tag">Jinja</span>
+        </div>
+        <div class="card__links">
+          <a href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf/blob/main/projects/dbt-data-platform.md">Read the case study →</a>
+        </div>
+      </article>
+
+      <article class="card reveal">
+        <div class="card__head">
+          <h3 class="card__title"><a href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf/blob/main/projects/fall-risk-assessment.md">Fall Risk Assessment Using Gait Analysis</a></h3>
+          <span class="status">Research · submitted</span>
+        </div>
+        <p>
+          Clinical fall-risk instruments are accurate and impractical; most published sensor
+          alternatives buy accuracy with ten body-mounted sensors or a network that cannot run on a
+          wearable. This study constrains itself to a <strong>single lower-back accelerometer</strong>
+          and measures the accuracy/cost trade-off explicitly.
+        </p>
+        <p>
+          Four published gait-cycle segmentation algorithms were implemented and compared, per-cycle
+          statistical and spatio-temporal features extracted, PCA applied at 99 % retained variance,
+          and eight classifiers benchmarked on 71 older adults from the public PhysioNet LTMM
+          database. KNN reaches <strong>89.7 % test accuracy in 0.008 s</strong> — statistically
+          level with a deep network 3,600× slower.
+        </p>
+        <div class="tags">
+          <span class="tag">signal processing</span><span class="tag">scikit-learn</span>
+          <span class="tag">PCA</span><span class="tag">TensorFlow Lite</span><span class="tag">Arduino</span>
+        </div>
+        <div class="card__links">
+          <a href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf/blob/main/projects/fall-risk-assessment.md">Read the case study →</a>
+          <a href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf/blob/main/articles/Fall_Risk_Assessment_Using_Gait_Analysis.pdf">Manuscript (PDF) →</a>
+        </div>
+      </article>
+
+      <article class="card reveal">
+        <div class="card__head">
+          <h3 class="card__title"><a href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf/blob/main/projects/interseg-wesam.md">Enhanced Interactive Segmentation for Borehole Images</a></h3>
+          <span class="status">Published · IGARSS 2025</span>
+        </div>
+        <p>
+          Detecting corrosion in ultrasonic borehole images is hard because moulded pipes carry
+          manufacturing patterns that look exactly like the defects. Labelling needs a domain expert,
+          which is why there is never enough of it — and SAM, plus its weakly-supervised adaptation
+          WeSAM, both underperform on the domain.
+        </p>
+        <p>
+          The paper improves WeSAM two ways: <strong>error-driven click simulation</strong> — each new
+          click placed at the centroid of the largest error region, the way a human annotator actually
+          corrects — and <strong>SegNext-style dense prompt encoding</strong>, feeding the previous
+          mask back so each interaction refines the last. Reported gain: over 13 IoU points.
+        </p>
+        <p>
+          I implemented the adaptation codebase used for the reported experiments: the click
+          simulator, both adaptation procedures, the anchor/student/teacher self-training loop with
+          LoRA fine-tuning, the dataset adapters and the evaluation tooling.
+        </p>
+        <div class="tags">
+          <span class="tag">PyTorch</span><span class="tag">SAM</span><span class="tag">LoRA</span>
+          <span class="tag">domain adaptation</span><span class="tag">segmentation</span>
+        </div>
+        <div class="card__links">
+          <a href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf/blob/main/projects/interseg-wesam.md">Read the case study →</a>
+          <a href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf/blob/main/articles/Paper_IGARSS_InterSEG.pdf">Paper (PDF) →</a>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ====================== RESEARCH ====================== -->
+<section id="research">
+  <div class="wrap">
+    <div class="reveal">
+      <p class="eyebrow">Research</p>
+      <h2 class="section-title">Publications</h2>
+      <p class="section-lede">
+        Author lists and positions reproduce the manuscripts exactly. Where I am not first author,
+        that is stated. DOIs are recorded only where they exist.
+      </p>
+    </div>
+
+    <article class="pub reveal">
+      <h3>Enhanced Foundation Model-Based Interactive Segmentation for Borehole Image Data</h3>
+      <p class="pub__authors">
+        Imane Baho*, Eya Ghamgui*, <strong>Abderaouf Boudia</strong>, Franco Marchesoni,
+        Josselin Kherroubi — <em>third author; *the first two contributed equally.</em>
+      </p>
+      <p class="pub__meta">IEEE IGARSS 2025 · SLB, France · <b>Published</b></p>
+      <p class="pub__abstract">
+        SAM and its weakly-supervised adaptation WeSAM both underperform on ultrasonic borehole
+        imagery, where manufacturing patterns mimic corrosion defects. The paper improves WeSAM with
+        error-driven iterative click simulation and SegNext-style dense prompt encoding, reporting a
+        gain of over 13 IoU points on the THBK pipe-thickness dataset.
+      </p>
+      <div class="card__links">
+        <a href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf/blob/main/articles/Paper_IGARSS_InterSEG.pdf">Paper (PDF) →</a>
+        <a href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf/blob/main/projects/interseg-wesam.md">My technical contribution →</a>
+      </div>
+    </article>
+
+    <article class="pub reveal">
+      <h3>Fall Risk Assessment Using Gait Analysis and Wearable Sensors: A Machine Learning Approach</h3>
+      <p class="pub__authors">
+        W. Dib, <strong>A. Boudia</strong>, F. Boukhedimi, O. Kerdjidj — <em>second author.</em>
+      </p>
+      <p class="pub__meta">Submitted to an IEEE journal · CDTA / École Nationale Polytechnique, Algiers · <b>Under review</b></p>
+      <p class="pub__abstract">
+        A single lower-back accelerometer, four gait-cycle segmentation algorithms compared,
+        per-cycle time and spatio-temporal features, PCA at 99 % retained variance, and a benchmark
+        of eight classifiers on 71 older adults from the public PhysioNet LTMM database.
+      </p>
+      <div class="card__links">
+        <a href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf/blob/main/articles/Fall_Risk_Assessment_Using_Gait_Analysis.pdf">Manuscript (PDF) →</a>
+        <a href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf/blob/main/projects/fall-risk-assessment.md">My contribution →</a>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ====================== EXPERIENCE ====================== -->
+<section id="experience">
+  <div class="wrap">
+    <div class="reveal">
+      <p class="eyebrow">Experience</p>
+      <h2 class="section-title">From research to production AI</h2>
+      <p class="section-lede">
+        Deep-learning foundations from 2022, research in signal processing and computer vision
+        through 2023–2024, industrial AI engineering since March 2025.
+      </p>
+    </div>
+
+    <ul class="timeline reveal">
+      <li class="tl">
+        <div class="tl__when"><b>March 2025</b>→ present</div>
+        <div>
+          <h3 class="tl__role">AI Engineer</h3>
+          <p class="tl__org">Cedrus Solutions · Paris</p>
+          <p class="tl__body">
+            Document intelligence and RAG over technical building audits; annual and hourly building
+            energy models; analytics engineering over national building data. Also GPU-optimised
+            Fast R-CNN on satellite imagery to detect rooftop energy equipment, and ML pipelines for
+            property valuation (XGBoost, Random Forest, MLP).
+          </p>
+        </div>
+      </li>
+
+      <li class="tl">
+        <div class="tl__when"><b>2024</b></div>
+        <div>
+          <h3 class="tl__role">AI Engineer Intern</h3>
+          <p class="tl__org">SLB · Clamart, France</p>
+          <p class="tl__body">
+            Weakly-supervised source-free domain adaptation of segmentation foundation models — SAM
+            with Vision Transformers, fine-tuned via LoRA — for out-of-domain industrial, medical and
+            domain-specific data. Led to the IGARSS 2025 paper.
+          </p>
+        </div>
+      </li>
+
+      <li class="tl">
+        <div class="tl__when"><b>Feb — Apr 2024</b></div>
+        <div>
+          <h3 class="tl__role">Research Intern</h3>
+          <p class="tl__org">CEDRIC Lab · Paris</p>
+          <p class="tl__body">
+            Median Sparse PCA for dimensionality reduction on high-dimensional genomic data,
+            assessed through K-means clustering with cumulative explained variance and the Rand index.
+          </p>
+        </div>
+      </li>
+
+      <li class="tl">
+        <div class="tl__when"><b>Feb — Jul 2023</b></div>
+        <div>
+          <h3 class="tl__role">Machine Learning Engineer Intern</h3>
+          <p class="tl__org">CDTA / École Nationale Polytechnique · Algiers</p>
+          <p class="tl__body">
+            Gait analysis from a single inertial measurement unit: signal pre-processing, gait-cycle
+            segmentation, feature extraction and end-to-end classifier benchmarking. Led to the
+            fall-risk manuscript.
+          </p>
+        </div>
+      </li>
+
+      <li class="tl">
+        <div class="tl__when"><b>Jul — Oct 2022</b></div>
+        <div>
+          <h3 class="tl__role">Deep Learning Engineer Intern</h3>
+          <p class="tl__org">CDTA · Algiers</p>
+          <p class="tl__body">
+            Human-activity recognition and fall detection with a 1D CNN, converted to TensorFlow Lite
+            and deployed on an Arduino Nano 33 BLE with onboard inertial sensors.
+          </p>
+        </div>
+      </li>
+    </ul>
+
+    <ul class="edu reveal">
+      <li>
+        <div class="tl__when">2023 — 2024</div>
+        <span><b>M2, Information Processing and Data Exploitation</b> — Télécom SudParis, Université Paris-Saclay</span>
+      </li>
+      <li>
+        <div class="tl__when">2020 — 2023</div>
+        <span><b>State Engineer + Master's, Electronics Engineering</b> — École Nationale Polytechnique d'Alger</span>
+      </li>
+      <li>
+        <div class="tl__when">2018 — 2020</div>
+        <span><b>Preparatory classes, science and technology</b> — École Nationale Polytechnique · ranked 81st of 1,961 at the national entrance exam</span>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ====================== SKILLS ====================== -->
+<section id="skills">
+  <div class="wrap">
+    <div class="reveal">
+      <p class="eyebrow">Technical expertise</p>
+      <h2 class="section-title">What I actually work with</h2>
+      <p class="section-lede">
+        Grouped by the kind of problem it solves. Everything listed is used in the projects and
+        publications above.
+      </p>
+    </div>
+
+    <div class="skills reveal">
+      <div class="skill-group">
+        <h3>AI engineering</h3>
+        <p>RAG · hybrid retrieval (dense, full-text, literal) · rank fusion and reranking ·
+        structured extraction · grounding and evidence validation · LLM evaluation and benchmarking ·
+        prompt engineering · Pydantic · LLM APIs (OpenRouter, Gemini-class models)</p>
+      </div>
+      <div class="skill-group">
+        <h3>Machine learning</h3>
+        <p>scikit-learn · XGBoost · random forests · SVM / KNN · feature engineering · PCA ·
+        hyperparameter optimisation · time-series forecasting · surrogate modeling · model evaluation
+        and error analysis · SHAP</p>
+      </div>
+      <div class="skill-group">
+        <h3>Deep learning</h3>
+        <p>PyTorch · PyTorch Lightning · TensorFlow / Keras · TensorFlow Lite · MLP · CNN · LSTM ·
+        semantic and instance segmentation · foundation models (SAM) · LoRA · domain adaptation ·
+        mixed-precision training</p>
+      </div>
+      <div class="skill-group">
+        <h3>Data &amp; analytics engineering</h3>
+        <p>PostgreSQL · PostGIS · pgvector · SQL · dbt · Parquet / PyArrow · pandas · NumPy ·
+        data pipeline design</p>
+      </div>
+      <div class="skill-group">
+        <h3>MLOps &amp; cloud</h3>
+        <p>MLflow · Prefect · Docker · pytest · Git · DVC · TensorBoard · Poetry ·
+        AWS (Lambda, S3, DynamoDB) · Azure · dataset and model versioning · model registries</p>
+      </div>
+      <div class="skill-group">
+        <h3>Scientific &amp; domain</h3>
+        <p>Building energy modeling · dynamic thermal simulation · geospatial data and remote
+        sensing · biomedical signal processing · computer vision · Python · SQL · C/C++ · MATLAB · R</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== ABOUT ====================== -->
+<section id="about">
+  <div class="wrap">
+    <div class="reveal">
+      <p class="eyebrow">About</p>
+      <h2 class="section-title">Short technical biography</h2>
+    </div>
+    <div class="prose reveal">
+      <p>
+        I started in electronics engineering at École Nationale Polytechnique d'Alger, which is where
+        the signal-processing habits came from, and moved into machine learning and deep learning from
+        2022 — first embedded, with a 1D CNN for fall detection running on a microcontroller, then
+        into gait analysis and classical machine learning at CDTA.
+      </p>
+      <p>
+        A master's at Télécom SudParis (Université Paris-Saclay) took that into computer vision and
+        foundation models: adapting SAM to industrial data at SLB, which became an
+        <a href="#research">IGARSS 2025 paper</a>, and a short research stint on sparse dimensionality
+        reduction for genomic data.
+      </p>
+      <p>
+        Since March 2025 I have been an AI Engineer at Cedrus Solutions, working on building energy:
+        LLM pipelines that read technical audits into structured, <strong>verifiable</strong> models;
+        machine-learning surrogates for thermal simulation at annual and hourly resolution; and the
+        analytics engineering underneath.
+      </p>
+      <p>
+        The thread through all of it is the same: I care less about a model that scores well than
+        about a system that can tell you <em>why</em> it was wrong. Most of what I build is the
+        measurement around the model — evidence gates, per-layer failure attribution, versioned
+        datasets, comparison reports — because that is what makes the model usable by someone who
+        is not me.
+      </p>
+      <div class="contact-links">
+        <a class="btn btn--primary" href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf/raw/main/cv/Abderaouf-Boudia-CV.pdf">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          Download CV
+        </a>
+        <a class="btn" href="mailto:abderaouf.boudia@gmail.com">Email</a>
+        <a class="btn" href="https://github.com/boudia-abderaouf">GitHub</a>
+        <a class="btn" href="https://www.linkedin.com/in/abderaouf-boudia-4bb166174/">LinkedIn</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap footer__inner">
+    <span>Abderaouf Boudia — AI Engineer &amp; Data Scientist</span>
+    <span>
+      <a href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf">Source</a> ·
+      <a href="https://github.com/boudia-abderaouf/BOUDIA-Abderaouf/raw/main/cv/Abderaouf-Boudia-CV.pdf">CV</a> ·
+      <a href="https://www.linkedin.com/in/abderaouf-boudia-4bb166174/">LinkedIn</a>
+    </span>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    // Theme toggle — cycles light/dark, remembers the choice per browser.
+    var root = document.documentElement;
+    var btn = document.getElementById('theme-toggle');
+    btn.addEventListener('click', function () {
+      var current = root.dataset.theme ||
+        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      var next = current === 'dark' ? 'light' : 'dark';
+      root.dataset.theme = next;
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+
+    // Reveal on scroll. Skipped entirely when the visitor asked for reduced motion.
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var items = document.querySelectorAll('.reveal');
+    if (!('IntersectionObserver' in window)) {
+      items.forEach(function (el) { el.classList.add('is-in'); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-in');
+        io.unobserve(entry.target);
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+    items.forEach(function (el) { io.observe(el); });
+  })();
+</script>
+
+</body>
+</html>
